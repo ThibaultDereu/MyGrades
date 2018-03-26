@@ -9,8 +9,12 @@
 	<th:block th:replace="fragments/navbar :: navbar" />
 
 	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-		<li class="breadcrumb-item"><a th:href="@{/filieres_sessions}">Filières</a></li>
+		<li class="breadcrumb-item">
+			<a th:href="@{/}">Home</a>
+		</li>
+		<li class="breadcrumb-item">
+			<a th:href="@{/filieres_sessions}">Filières</a>
+		</li>
 		<li class="breadcrumb-item active">Sessions</li>
 	</ol>
 
@@ -49,8 +53,7 @@
 						th:text="${#temporals.format(session.dateOuverture, 'dd/MM/yyyy')}" />
 					<td class="align-middle" style="padding: 0">
 						<div class="dropdown">
-							<button
-								class="btn btn-outline-secondary btn-sm dropdown-toggle"
+							<button class="btn btn-outline-secondary btn-sm dropdown-toggle"
 								type="button" id="dropdownActions" data-toggle="dropdown">action...</button>
 							<div class="dropdown-menu">
 								<a href="#" class="dropdown-item bouton-formulaire-modif"
@@ -69,21 +72,26 @@
 									</button>
 								</form>
 
-								<a class="dropdown-item" th:href="@{'/filieres_sessions/' + ${filiere.id} + '/sessions/' + ${session.id} + '/etudiants'}">
+								<a class="dropdown-item"
+									th:href="@{'/filieres_sessions/' + ${filiere.id} + '/sessions/' + ${session.id} + '/etudiants'}">
 									<span class="glyphicon glyphicon-user" />
 									Gérer les étudiants
 								</a>
 
-								<a class="dropdown-item" th:href="@{'/filieres_sessions/' + ${filiere.id} + '/sessions/' + ${session.id} + '/devoirs'}">
+								<a class="dropdown-item"
+									th:href="@{'/filieres_sessions/' + ${filiere.id} + '/sessions/' + ${session.id} + '/devoirs'}">
 									<span class="glyphicon glyphicon-file" />
 									Gérer les devoirs
 								</a>
 
-								<a href="#" class="dropdown-item bouton-cloturer-session"
-									th:attr="data-id=${session.id}">
-									<span class="glyphicon glyphicon-ok" />
-									Clôturer
-								</a>
+								<form method="POST">
+									<input type="hidden" name="idSession" th:value="${session.id}" />
+									<button class="dropdown-item" type="submit" name="action"
+										value="cloturer">
+										<span class="glyphicon glyphicon-ok" />
+										Clôturer
+									</button>
+								</form>
 							</div>
 						</div>
 					</td>
@@ -91,8 +99,7 @@
 			</tbody>
 		</table>
 
-		<br />
-		<br />
+		<br /> <br />
 		<div class="text-center text-secondary">Sessions clôturées</div>
 
 		<table class="table" id="table-sessions-cloturees">
@@ -108,7 +115,7 @@
 			</thead>
 
 			<tbody>
-				<tr th:each="session : ${sessionsCLoturees}">
+				<tr th:each="session : ${sessionsCloturees}">
 					<td>
 						<span th:text="${session.nom}" />
 					</td>
@@ -124,17 +131,19 @@
 					</td>
 					<td class="align-middle" style="padding: 0">
 						<div class="dropdown">
-							<button
-								class="btn btn-outline-secondary btn-sm dropdown-toggle"
+							<button class="btn btn-outline-secondary btn-sm dropdown-toggle"
 								type="button" id="dropdownActions" data-toggle="dropdown">action...</button>
 							<div class="dropdown-menu">
 
-								<a href="#" class="dropdown-item">
+								<a
+									th:href="@{'/filieres_sessions/' + ${filiere.id} + '/sessions/' + ${session.id} + '/etudiants'}"
+									class="dropdown-item">
 									<span class="glyphicon glyphicon-user" />
 									Voir les étudiants
 								</a>
 
-								<a class="dropdown-item" th:href="@{'/filieres_sessions/' + ${filiere.id} + '/sessions/' + ${session.id} + '/devoirs'}">
+								<a class="dropdown-item"
+									th:href="@{'/filieres_sessions/' + ${filiere.id} + '/sessions/' + ${session.id} + '/devoirs'}">
 									<span class="glyphicon glyphicon-file" />
 									Voir les devoirs
 								</a>
@@ -146,7 +155,7 @@
 		</table>
 
 	</div>
-	
+
 	<th:block th:replace="fragments/footer :: footer" />
 
 	<div id="modalForm" class="modal fade" tabindex="-1">

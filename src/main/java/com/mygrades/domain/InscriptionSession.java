@@ -29,7 +29,7 @@ public class InscriptionSession extends AbstractInscription {
 	private boolean termine;
 	private boolean acquis;
 	
-	@ManyToOne(optional = false)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	private Session session;
 	
 	@ManyToOne(cascade=CascadeType.MERGE, optional = false)

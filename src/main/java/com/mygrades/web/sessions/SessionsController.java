@@ -142,8 +142,8 @@ public class SessionsController {
 		try {
 			sessionsService.cloturerSession(idSession);
 			message = "La session a été clôturée.";
-		} catch (DataIntegrityViolationException e) {
-			message = "La session n'a pas pu être clôturée. Vérifiez que tous les devoirs ont été notés.";
+		} catch (IllegalStateException e) {
+			message = e.getMessage();
 		}
 
 		redAttr.addFlashAttribute("message", message);

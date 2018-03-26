@@ -67,7 +67,7 @@
 						th:href="@{'/filieres_sessions/' + ${idFiliere}+ '/sessions/' + ${sessionModel.id} + '/etudiants/' + ${inscription.id} + '/modules'}" />
 				</td>
 				<td th:text="${inscription.statut}" />
-				<td th:text="${inscription.note}" />
+				<td th:if="${inscription.note}" th:text="${#numbers.formatDecimal(inscription.note, 1, 2)}" />
 				<td>
 					<form method="POST" class="hover-display">
 						<input type="hidden" name="idInscriptionSession"

@@ -26,7 +26,7 @@ public class InscriptionModule extends AbstractInscription {
 	@ManyToOne(optional = false)
 	private Module module;
 	
-	@ManyToOne(optional = false, cascade=CascadeType.MERGE)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	private InscriptionSession inscriptionSession;
 	
 	@OneToMany(mappedBy="inscriptionModule", orphanRemoval=true, cascade=CascadeType.ALL)

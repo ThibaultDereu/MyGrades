@@ -26,7 +26,7 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
 			+ "ORDER BY ses.dateCloture, sem.nom ")
 	public List<Session> getSessions(@Param("idFiliere") Long idFiliere, @Param("actif") Boolean actif);
 		
-	
+	// récupérer tous les modules pouvant être notés (en cours), et les éventuels devoirs rattachés
 	@Query("SELECT mod.id AS idModule, mod.code AS codeModule, mod.nom AS nomModule, "
 			+ "  dev.id AS idDevoir, dev.nom AS nomDevoir, dev.coefficient AS coefficient, "
 			+ "  COUNT(inscD) As nbInscriptions, "
@@ -55,8 +55,7 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
 			+ "ORDER BY etu.numero ")
 	public List<Tuple> getInscriptionsSessions(@Param("idSession") Long idSession);
 	
-	// obligés de fetcher explicitement etudiant ET enseignant pour éviter un select pour chaque profil :(((
-	// Même mettre Utilisateur.profilEnseignant et Utilisateur.profilEtudiant ne suffit pas.
+
 	@Query("SELECT uti "
 			+ "FROM Utilisateur uti "
 			+ "JOIN FETCH uti.profilEtudiant etu "
@@ -68,7 +67,7 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
 			+ "ORDER BY etu.numero ")
 	public List<Utilisateur> getEtudiantsDispo(@Param("idSession") Long idSession);
 	
-	// tous les modules présents dans un semestre, et pas encore présnets dans une inscription session
+	// tous les modules présents dans un semestre, et pas encore présents dans une inscription session
 	@Query("SELECT mod "
 			+ "FROM Module mod "
 			+ "WHERE mod in ( "

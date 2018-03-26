@@ -124,7 +124,8 @@
 							th:text="${'Résultat : ' + inscriptionSession.statut}" />
 					</td>
 					<td>
-						<strong th:text="${inscriptionSession.note}" />
+						<strong th:if="${inscriptionSession.note}"
+							th:text="${'moyenne : ' + #numbers.formatDecimal(inscriptionSession.note, 1, 2)}" />
 					</td>
 					<td />
 				</tr>

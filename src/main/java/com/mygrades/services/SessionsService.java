@@ -6,7 +6,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
+import javax.persistence.metamodel.EntityType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -142,12 +145,25 @@ public class SessionsService {
 		repSession.delete(idSession);
 
 	}
-
+	
+	// pour debugger
+    @PersistenceContext
+    private EntityManager em;
+    
+    
 	@Transactional
 	public void cloturerSession(Long idSession) {
-		// TODO Auto-generated method stub
-	}
+		
+		Session session = repSession.findOne(idSession);
+		session.cloturer();
 
+		
+		repSession.save(session);
+		
+	}
+	
+
+    
 	public List<ModuleAvecDevoirsModel> getModulesAvecDevoirs(Long idSession) {
 
 		// récupérer les devoirs
