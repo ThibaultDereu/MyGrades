@@ -67,7 +67,7 @@ public class FilieresController {
 			response.setHeader("appMessage", String.format("La filière %s a été créée.", filiereModel.getNom()));
 		}
 		
-		return "/fragments/formulaire_filiere";
+		return "fragments/formulaire_filiere";
 	}
 
 	
@@ -79,7 +79,7 @@ public class FilieresController {
 	public String modifierFiliere(@PathVariable String filiereId, Model model) {
 		FiliereModel filiereModel = filieresService.getFiliere(Long.parseLong(filiereId));
 		model.addAttribute("filiereModel", filiereModel);
-		return "/fragments/formulaire_filiere";
+		return "fragments/formulaire_filiere";
 	}
 
 	
@@ -98,7 +98,7 @@ public class FilieresController {
 			response.setHeader("appMessage", String.format("La filière %s a été modifiée.", filiereModel.getNom()));
 		}
 		
-		return "/fragments/formulaire_filiere";
+		return "fragments/formulaire_filiere";
 	}
 	
 	
@@ -118,7 +118,7 @@ public class FilieresController {
 		}
 		
 		response.setHeader("appMessage", message);
-		return "/fragments/formulaire_filiere";
+		return "fragments/formulaire_filiere";
 	}
 
 }

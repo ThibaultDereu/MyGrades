@@ -35,7 +35,7 @@ public class SessionsController {
 	public String afficherFilieresSessions(Model model) {
 		List<FiliereSessionsModel> filieres = sessionsService.getAllFilieres();
 		model.addAttribute("filieres", filieres);
-		return "/filieres_sessions";
+		return "filieres_sessions";
 	}
 
 	@GetMapping("/filieres_sessions/{idFiliere}/sessions")
@@ -52,7 +52,7 @@ public class SessionsController {
 		List<SessionModel> sessionsCloturees = sessionsService.getSessions(idFiliere, false);
 		model.addAttribute("sessionsCloturees", sessionsCloturees);
 
-		return "/sessions";
+		return "sessions";
 	}
 
 	@GetMapping("/filieres_sessions/{idFiliere}/sessions/formulaire_session")
@@ -63,7 +63,7 @@ public class SessionsController {
 		model.addAttribute("semestres", semestres);
 
 		model.addAttribute("sessionModel", new SessionModel());
-		return "/fragments/formulaire_session";
+		return "fragments/formulaire_session";
 
 	}
 
@@ -83,7 +83,7 @@ public class SessionsController {
 			response.setHeader("appMessage", String.format("La session %s a été créé.", sessionModel.getNom()));
 		}
 
-		return "/fragments/formulaire_session";
+		return "fragments/formulaire_session";
 	}
 
 	@GetMapping("/filieres_sessions/{idFiliere}/sessions/formulaire_session/{idSession}")
@@ -94,7 +94,7 @@ public class SessionsController {
 		SessionModel sessionModel = sessionsService.getSession(idSession);
 		model.addAttribute("sessionModel", sessionModel);
 
-		return "/fragments/formulaire_session";
+		return "fragments/formulaire_session";
 
 	}
 
@@ -112,7 +112,7 @@ public class SessionsController {
 			response.setHeader("appMessage", String.format("La session %s a été modifiée.", sessionModel.getNom()));
 		}
 
-		return "/fragments/formulaire_session";
+		return "fragments/formulaire_session";
 
 	}
 

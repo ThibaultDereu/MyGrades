@@ -39,7 +39,7 @@ public class InscriptionsController {
 		List<EtudiantModel> etudiants = sessionsService.getEtudiantsDispo(idSession);
 		model.addAttribute("etudiantsDispo", etudiants);
 
-		return "/etudiants_inscrits";
+		return "etudiants_inscrits";
 
 	}
 
@@ -112,7 +112,7 @@ public class InscriptionsController {
 		List<ModuleModel> modulesDispo = sessionsService.getModuleDispo(idInscriptionSession);
 		model.addAttribute("modulesDispo", modulesDispo);
 
-		return "/inscriptions_modules";
+		return "inscriptions_modules";
 
 	}
 

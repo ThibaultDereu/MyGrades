@@ -259,30 +259,6 @@ public class UtilisateursController {
 		}
 		return "fragments/formulaire_enseignant";
 	}
-//
-//	@PostMapping("/utilisateurs/modifier_etudiant")
-//	public String validerModificationEtudiant(@Valid @ModelAttribute("etudiant") EtudiantModel etudiantModel,
-//			BindingResult bindingResult, HttpServletResponse response) {
-//
-//		if (bindingResult.hasErrors()) {
-//			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//		} else {
-//			try {
-//				utilisateursService.modifierEtudiant(etudiantModel);
-//				response.setStatus(HttpServletResponse.SC_OK);
-//				response.setHeader("appMessage",
-//						String.format("Le profil étudiant de l'utilisateur %s %s a été modifié.",
-//								etudiantModel.getPrenom(), etudiantModel.getNom()));
-//			} catch (DataIntegrityViolationException e) {
-//				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//				response.setHeader("appMessage",
-//						"Modification impossible. Vérifiez que le numéro d'étudiant n'existe pas déjà.");
-//			}
-//		}
-//
-//		return "fragments/formulaire_etudiant";
-//
-//	}
 
 	@PostMapping("/utilisateurs/supprimer_enseignant")
 	public String validerSuppressionEnseignant(@ModelAttribute("enseignant") EnseignantModel enseignantModel,

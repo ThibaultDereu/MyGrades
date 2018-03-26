@@ -73,7 +73,7 @@ public class DevoirsController {
 					devoir.getNom(), devoir.getNomModule()));
 		}
 
-		return "/fragments/formulaire_devoir";
+		return "fragments/formulaire_devoir";
 	}
 
 	@GetMapping("/filieres_sessions/{idFiliere}/sessions/{idSession}/devoirs/formulaire_devoir/{idDevoir}")
@@ -147,7 +147,7 @@ public class DevoirsController {
 		model.addAttribute("devoir", devoir);
 		model.addAttribute("inscriptionsDevoir", inscriptionsDevoir);
 
-		return "/notes_devoir";
+		return "notes_devoir";
 
 	}
 
