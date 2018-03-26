@@ -1,0 +1,41 @@
+
+<form th:object="${sessionModel}">
+
+	<input type="hidden" id="id" name="id" th:value="*{id}" />
+
+	<div class="form-group form-row">
+		<label for="nom" class="col-sm-3 col-form-label">nom</label>
+		<div class="col-sm-9">
+			<input type="text" id="nom" name="nom" class="form-control"
+				autofocus="autofocus" title="nom de la session" th:value="*{nom}" />
+			<small class="text-danger" th:if="${#fields.hasErrors('nom')}"
+				th:errors="*{nom}"></small>
+		</div>
+
+	</div>
+
+	<div class="form-group form-row">
+		<label for="semestre" class="col-sm-3 col-form-label">semestre</label>
+		<div class="col-sm-9">
+			<th:block th:unless="*{id}">
+				<select th:field="*{idSemestre}" id="semestre" name="semestre"
+					class="selectpicker" title="Choisissez un semestre...">
+					<option th:each="semestre : ${semestres}" th:value="${semestre.id}"
+						th:text="${semestre.nom}" />
+				</select>
+				<div>
+					<small class="text-danger"
+						th:if="${#fields.hasErrors('idSemestre')}"
+						th:errors="*{idSemestre}" />
+				</div>
+			</th:block>
+			<th:block th:if="*{id}">
+				<input type="hidden" id="idSemestre" name="idSemestre" th:value="*{idSemestre}" />
+				<input class="form-control-plaintext" id="nomSemestre"
+					name="nomSemestre" type="text" th:value="*{nomSemestre}"/>
+			</th:block>
+		</div>
+	</div>
+
+
+</form>

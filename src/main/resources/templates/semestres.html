@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+		<li class="breadcrumb-item"><a th:href="@{/filieres}">Filières</a></li>
+		<li class="breadcrumb-item active">Semestres</li>
+	</ol>
+
+	<div class="container">
+
+		<h2 th:text="${'Filière ' + filiere.nom}" class="text-center">Nom
+			de la filière</h2>
+		<br />
+
+		<button class="btn bouton-formulaire-nouveau"
+			data-form="#formSemestre"
+			th:attr="data-url=@{'/filieres/' + ${filiere.id} + '/semestres/formulaire_semestre'}">
+			<span class="glyphicon glyphicon-plus" />
+			nouveau semestre
+		</button>
+
+
+		<table class="table">
+
+			<tr>
+				<th scope="col">semestre</th>
+				<th scope="col">modules</th>
+			</tr>
+
+			<tr th:each="semestre : ${semestres}">
+				<td>
+					<span th:text="${semestre.nom}" />
+					<a href="#"
+						class="bouton-formulaire-modif glyphicon glyphicon-pencil hover-display"
+						data-toggle="tooltip" title="modifier le nom du semestre"
+						th:attr="data-url=@{'/filieres/' + ${filiere.id} + '/semestres/formulaire_semestre/' + ${semestre.id}}"
+						data-form="#formSemestre" />
+				</td>
+				<td>
+					<span
+						th:text="${semestre.nbModules + ' module' + (semestre.nbModules > 1 ? 's' : '')}" />
+					<a data-toggle="tooltip" title="voir semestres"
+						th:href="@{'/filieres/' + ${filiere.id} + '/semestres/' + ${semestre.id} + '/modules'}"
+						class="glyphicon glyphicon-list hover-display" />
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<th:block th:replace="fragments/footer :: footer" />
+
+	<div id="modalForm" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Semestre</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<form id="formSemestre" class="ajax-form" />
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-success bouton-creer"
+						th:attr="data-url=@{'/filieres/' + ${filiere.id} + '/semestres/creer_semestre'}"
+						data-form="#formSemestre">
+						<span class="glyphicon glyphicon-ok" />
+						créer
+					</button>
+					<button class="btn btn-success bouton-modifier"
+						th:attr="data-url=@{'/filieres/' + ${filiere.id} + '/semestres/modifier_semestre'}"
+						data-form="#formSemestre">
+						<span class="glyphicon glyphicon-ok" />
+						modifier
+					</button>
+					<button class="btn btn-danger bouton-supprimer"
+						th:attr="data-url=@{'/filieres/' + ${filiere.id} + '/semestres/supprimer_semestre'}"
+						data-form="#formSemestre">
+						<span class="glyphicon glyphicon-trash" />
+						supprimer
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div
+		class="alert alert-warning alert-dismissible fade show app-message" />
+
+	<th:block th:replace="fragments/js_includes :: js_includes" />
+
+</body>
+</html>

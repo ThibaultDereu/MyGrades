@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item">
+			<a th:href="@{/}">Home</a>
+		</li>
+		<li class="breadcrumb-item">
+			<a th:href="@{/filieres_sessions}">Filières</a>
+		</li>
+		<li class="breadcrumb-item">
+			<a th:href="@{'/filieres_sessions/' + ${idFiliere} + '/sessions'}">Sessions</a>
+		</li>
+		<li class="breadcrumb-item">
+			<a
+				th:href="@{'/filieres_sessions/' + ${idFiliere} + '/sessions/' + ${sessionModel.id} + '/devoirs'}">Devoirs</a>
+		</li>
+		<li class="breadcrumb-item active">notes</li>
+	</ol>
+
+	<div class="container" role="main">
+
+		<h2 class="text-center"
+			th:text="${'Filière ' + sessionModel.nomFiliere + ' / Semestre ' + sessionModel.nomSemestre}" />
+		<h3 class="text-center" th:text="${'session ' + sessionModel.nom}" />
+		<h4 class="text-center text-muted"
+			th:text="${'Module ' + devoir.codeModule + ' - devoir ' + devoir.nom}" />
+
+		<br />
+
+
+		<table class="table">
+
+			<tr>
+				<th>Numero Etudiant</th>
+				<th>Etudiant</th>
+				<th>Note</th>
+			</tr>
+
+			<tr th:each="inscD : ${inscriptionsDevoir}">
+				<td th:text="${inscD.numeroEtudiant}" />
+				<td
+					th:text="${inscD.prenomEtudiant + ' ' + #strings.toUpperCase(inscD.nomEtudiant)}" />
+				<td>
+
+					<form class="form-noter form-inline"
+						th:id="${'form-noter' + inscD.id}"
+						th:action="@{'/filieres_sessions/' + ${idFiliere} + '/sessions/' + ${sessionModel.id} + '/devoirs/' + ${inscD.id} + '/notes/noter_devoir'}"
+						th:classappend="${inscD.note == null ? '' : 'd-none'}">
+						<input type="hidden" name="idInscriptionDevoir"
+							th:value="${inscD.id}" />
+						<input class="form-control" name="note" type="number"
+							th:id="${'input-note' + inscD.id}" min="0" max="20" step="0.1" />
+						<button class="btn btn-primary glyphicon glyphicon-ok invisible"
+							type="submit" />
+					</form>
+
+					<form class="form-denoter form-row"
+						th:id="${'form-denoter' + inscD.id}"
+						th:action="@{'/filieres_sessions/' + ${idFiliere} + '/sessions/' + ${sessionModel.id} + '/devoirs/' + ${inscD.id} + '/notes/annuler_note_devoir'}"
+						th:classappend="${inscD.note == null ? 'd-none' : ''}">
+						<input type="hidden" name="idInscriptionDevoir"
+							th:value="${inscD.id}" />
+						<input name="note" class="form-control-plaintext"
+							th:id="${'text-note' + inscD.id}" th:value="${inscD.note}"
+							readonly="readonly" style="width: 6em" />
+						<button
+							class="glyphicon glyphicon-remove text-danger icon-submit hover-display"
+							type="submit" />
+					</form>
+
+				</td>
+			</tr>
+
+		</table>
+
+	</div>
+
+	<th:block th:replace="fragments/footer :: footer" />
+
+
+	<div
+		class="alert alert-warning alert-dismissible fade show app-message" />
+
+	<th:block th:replace="fragments/js_includes :: js_includes" />
+
+</body>
+
+<script>
+	$(document).ready(function() {
+
+		$(".form-noter").keyup(function() {
+
+			valueNote = $(this).find(".input-note").val();
+			submitButton = $(this).find("button");
+			if (valueNote != "") {
+				$(submitButton).removeClass("invisible");
+			} else {
+				$(submitButton).addClass("invisible");
+			}
+
+		})
+
+		$(".form-noter").submit(function(event) {
+
+			event.preventDefault();
+
+			$.ajax({
+				type : "POST",
+				url : $(this).attr("action"),
+				data : $(this).serialize(),
+				success : function(data) {
+
+					var idInscD = data.idInscriptionDevoir;
+					var note = data.note;
+
+					$("#text-note" + idInscD).val(note);
+					$("#form-noter" + idInscD).addClass("d-none");
+					$("#form-denoter" + idInscD).removeClass("d-none");
+
+				},
+				error : function() {
+					console.log("erreur");
+				}
+			});
+
+		});
+
+		$(".form-denoter").submit(function(event) {
+
+			event.preventDefault();
+
+			$.ajax({
+				type : "POST",
+				url : $(this).attr("action"),
+				data : $(this).serialize(),
+				success : function(data) {
+
+					var idInscD = data.idInscriptionDevoir;
+
+					$("#form-denoter" + idInscD).addClass("d-none");
+					$("#form-noter" + idInscD).removeClass("d-none");
+
+				},
+				error : function() {
+					console.log("erreur");
+				}
+			});
+
+		});
+
+	})
+</script>
+
+</html>
+

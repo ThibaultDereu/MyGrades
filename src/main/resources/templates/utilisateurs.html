@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+
+	<br />
+
+	<div class="container" role="main">
+
+		<h2 class="text-center">Utilisateurs</h2>
+
+		<br />
+		<button class="btn bouton-formulaire-nouveau ajax-form"
+			th:attr="data-url=@{/utilisateurs/formulaire_utilisateur}"
+			data-form="#formUtilisateur">
+			<span class="glyphicon glyphicon-plus" />
+			nouvel utilisateur
+		</button>
+
+
+		<table class="table">
+			<tr>
+				<th scope="col">utilisateur</th>
+				<th scope="col">e-mail</th>
+				<th scope="col">administrateur</th>
+				<th scope="col">profil étudiant</th>
+				<th scope="col">profil enseignant</th>
+			</tr>
+
+			<tr th:each="utilisateur : ${utilisateurs}">
+				<td>
+					<a href="#" class="bouton-formulaire-modif"
+						data-form="#formUtilisateur"
+						th:text="${utilisateur.prenom + ' ' + #strings.toUpperCase(utilisateur.nom)}"
+						th:attr="data-url=@{'/utilisateurs/formulaire_utilisateur/' + ${utilisateur.id}}" />
+				</td>
+
+				<td>
+					<span th:text="${utilisateur.email}" />
+				</td>
+				
+				<td class="text-center">
+					<span class="glyphicon"
+						th:classappend="${utilisateur.admin ? 'glyphicon-ok' : ''}" />
+				</td>
+				
+				<td class="text-center">
+					<a th:if="${utilisateur.idEtudiant}" href="#"
+						data-form="#formEtudiant"
+						th:attr="data-url=@{'/utilisateurs/formulaire_etudiant/' + ${utilisateur.id}}"
+						class="glyphicon glyphicon-user bouton-formulaire-modif" />
+
+					<a th:unless="${utilisateur.idEtudiant}" href="#"
+						data-form="#formEtudiant"
+						th:attr="data-url=@{'/utilisateurs/formulaire_etudiant/' + ${utilisateur.id}}"
+						class="glyphicon glyphicon-plus bouton-formulaire-nouveau hover-display" />
+				</td>
+				
+				<td class="text-center">
+					<a th:if="${utilisateur.idEnseignant}" href="#"
+						data-form="#formEnseignant"
+						th:attr="data-url=@{'/utilisateurs/formulaire_enseignant/' + ${utilisateur.id}}"
+						class="glyphicon glyphicon-user bouton-formulaire-modif" />
+
+					<a th:unless="${utilisateur.idEnseignant}" href="#"
+						data-form="#formEnseignant"
+						th:attr="data-url=@{'/utilisateurs/formulaire_enseignant/' + ${utilisateur.id}}"
+						class="glyphicon glyphicon-plus bouton-formulaire-nouveau hover-display" />
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<th:block th:replace="fragments/footer :: footer" />
+
+	<div id="modal-utilisateur" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Utilisateur</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<form class="ajax-form" id="formUtilisateur" />
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-success bouton-creer"
+						data-form="#formUtilisateur"
+						th:attr="data-url=@{/utilisateurs/creer_utilisateur}">
+						<span class="glyphicon glyphicon-ok" />
+						créer
+					</button>
+					<button class="btn btn-success bouton-modifier"
+						data-form="#formUtilisateur"
+						th:attr="data-url=@{/utilisateurs/modifier_utilisateur}">
+						<span class="glyphicon glyphicon-ok" />
+						modifier
+					</button>
+					<button class="btn btn-danger bouton-supprimer"
+						data-form="#formUtilisateur"
+						th:attr="data-url=@{/utilisateurs/supprimer_utilisateur}">
+						<span class="glyphicon glyphicon-trash" />
+						supprimer
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="modal-etudiant" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Profil étudiant</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<form class="ajax-form" id="formEtudiant" />
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-success bouton-creer"
+						data-form="#formEtudiant"
+						th:attr="data-url=@{/utilisateurs/creer_etudiant}">
+						<span class="glyphicon glyphicon-ok" />
+						créer
+					</button>
+					<button class="btn btn-success bouton-modifier"
+						data-form="#formEtudiant"
+						th:attr="data-url=@{/utilisateurs/modifier_etudiant}">
+						<span class="glyphicon glyphicon-ok" />
+						modifier
+					</button>
+					<button class="btn btn-danger bouton-supprimer"
+						data-form="#formEtudiant"
+						th:attr="data-url=@{/utilisateurs/supprimer_etudiant}">
+						<span class="glyphicon glyphicon-trash" />
+						supprimer
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="modal-enseignant" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Profil enseignant</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<form class="ajax-form" id="formEnseignant" />
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-success bouton-creer"
+						data-form="#formEnseignant"
+						th:attr="data-url=@{/utilisateurs/creer_enseignant}">
+						<span class="glyphicon glyphicon-ok" />
+						créer
+					</button>
+					<button class="btn btn-success bouton-modifier"
+						data-form="#formEnseignant"
+						th:attr="data-url=@{/utilisateurs/modifier_enseignant}">
+						<span class="glyphicon glyphicon-ok" />
+						modifier
+					</button>
+					<button class="btn btn-danger bouton-supprimer"
+						data-form="#formEnseignant"
+						th:attr="data-url=@{/utilisateurs/supprimer_enseignant}">
+						<span class="glyphicon glyphicon-trash" />
+						supprimer
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div
+		class="alert alert-warning alert-dismissible fade show app-message" />
+
+	<th:block th:replace="fragments/js_includes :: js_includes" />
+	
+</body>
+
+</html>
+

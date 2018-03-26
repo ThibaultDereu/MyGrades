@@ -1,0 +1,27 @@
+
+<th:block th:fragment="js_includes">
+	<script type="text/javascript"
+		th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.bundle.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+	<!-- 	<script type="text/javascript" defer="defer" th:src="@{/webjars/font-awesome/5.0.6/svg-with-js/js/fontawesome-all.min.js}"></script> -->
+	<script type="text/javascript" th:src="@{/js/custom-messages.js}"></script>
+	<script type="text/javascript" th:src="@{/js/ajax-form.js}"></script>
+
+	<script type="text/javascript">		
+		
+		$(document).ready(function() {
+			
+			// initialisation des tooltips
+			$('[data-toggle="tooltip"]').tooltip();
+			
+			// class pour charger une url sans élément a.
+			$(".bouton-load-url").click(function() {
+				document.location = $(this).data("url");
+			});
+			
+		});
+	</script>
+</th:block>
+

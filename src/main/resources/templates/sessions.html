@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+		<li class="breadcrumb-item"><a th:href="@{/filieres_sessions}">Filières</a></li>
+		<li class="breadcrumb-item active">Sessions</li>
+	</ol>
+
+	<div class="container" role="main">
+
+		<h2 class="text-center" th:text="${'Filière ' + filiere.nom}"></h2>
+		<br />
+
+		<button class="btn bouton-formulaire-nouveau" data-form="#formSession"
+			th:attr="data-url=@{'/filieres_sessions/' + ${filiere.id} + '/sessions/formulaire_session'}">
+			<span class="glyphicon glyphicon-plus" />
+			nouvelle session
+		</button>
+
+		<div class="text-center text-secondary">Sessions actives</div>
+
+		<table class="table" id="table-sessions-actives">
+			<thead>
+				<tr>
+					<th>nom session</th>
+					<th>numéro session</th>
+					<th>semestre</th>
+					<th>date ouverture</th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="session : ${sessionsActives}">
+					<td>
+						<span th:text="${session.nom}" />
+					</td>
+					<td th:text="${session.numeroSession}" />
+					<td th:text="${session.nomSemestre}" />
+					<td th:if="${session.dateOuverture}"
+						th:text="${#temporals.format(session.dateOuverture, 'dd/MM/yyyy')}" />
+					<td class="align-middle" style="padding: 0">
+						<div class="dropdown">
+							<button
+								class="btn btn-outline-secondary btn-sm dropdown-toggle"
+								type="button" id="dropdownActions" data-toggle="dropdown">action...</button>
+							<div class="dropdown-menu">
+								<a href="#" class="dropdown-item bouton-formulaire-modif"
+									data-form="#formSession"
+									th:attr="data-url=@{'/filieres_sessions/' + ${filiere.id} + '/sessions/formulaire_session/' + ${session.id}}">
+									<span class="glyphicon glyphicon-pencil" />
+									Renommer
+								</a>
+
+								<form method="POST">
+									<input type="hidden" name="idSession" th:value="${session.id}" />
+									<button class="dropdown-item" type="submit" name="action"
+										value="supprimer">
+										<span class="glyphicon glyphicon-remove" />
+										Supprimer
+									</button>
+								</form>
+
+								<a class="dropdown-item" th:href="@{'/filieres_sessions/' + ${filiere.id} + '/sessions/' + ${session.id} + '/etudiants'}">
+									<span class="glyphicon glyphicon-user" />
+									Gérer les étudiants
+								</a>
+
+								<a class="dropdown-item" th:href="@{'/filieres_sessions/' + ${filiere.id} + '/sessions/' + ${session.id} + '/devoirs'}">
+									<span class="glyphicon glyphicon-file" />
+									Gérer les devoirs
+								</a>
+
+								<a href="#" class="dropdown-item bouton-cloturer-session"
+									th:attr="data-id=${session.id}">
+									<span class="glyphicon glyphicon-ok" />
+									Clôturer
+								</a>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<br />
+		<br />
+		<div class="text-center text-secondary">Sessions clôturées</div>
+
+		<table class="table" id="table-sessions-cloturees">
+			<thead>
+				<tr>
+					<th>nom session</th>
+					<th>numéro session</th>
+					<th>semestre</th>
+					<th>date ouverture</th>
+					<th>date clôture</th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="session : ${sessionsCLoturees}">
+					<td>
+						<span th:text="${session.nom}" />
+					</td>
+					<td th:text="${session.numeroSession}" />
+					<td th:text="${session.nomSemestre}" />
+					<td>
+						<span th:if="${session.dateOuverture}"
+							th:text="${#temporals.format(session.dateOuverture, 'dd/MM/yyyy')}" />
+					</td>
+					<td>
+						<span th:if="${session.dateCloture}"
+							th:text="${#temporals.format(session.dateCloture, 'dd/MM/yyyy')}" />
+					</td>
+					<td class="align-middle" style="padding: 0">
+						<div class="dropdown">
+							<button
+								class="btn btn-outline-secondary btn-sm dropdown-toggle"
+								type="button" id="dropdownActions" data-toggle="dropdown">action...</button>
+							<div class="dropdown-menu">
+
+								<a href="#" class="dropdown-item">
+									<span class="glyphicon glyphicon-user" />
+									Voir les étudiants
+								</a>
+
+								<a class="dropdown-item" th:href="@{'/filieres_sessions/' + ${filiere.id} + '/sessions/' + ${session.id} + '/devoirs'}">
+									<span class="glyphicon glyphicon-file" />
+									Voir les devoirs
+								</a>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+	
+	<th:block th:replace="fragments/footer :: footer" />
+
+	<div id="modalForm" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Session</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<form class="ajax-form" id="formSession" />
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-success bouton-creer"
+						data-form="#formSession"
+						th:attr="data-url=@{'/filieres_sessions/' + ${filiere.id} + '/sessions/creer_session'}">
+						<span class="glyphicon glyphicon-ok" />
+						créer
+					</button>
+					<button class="btn btn-success bouton-modifier"
+						data-form="#formSession"
+						th:attr="data-url=@{'/filieres_sessions/' + ${filiere.id} + '/sessions/modifier_session' }">
+						<span class="glyphicon glyphicon-ok" />
+						modifier
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div
+		class="alert alert-warning alert-dismissible fade show app-message"
+		th:text="${message}" />
+
+</body>
+
+<th:block th:replace="fragments/js_includes :: js_includes" />
+
+</html>
+

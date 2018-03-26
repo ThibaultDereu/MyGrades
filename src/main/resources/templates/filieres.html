@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+		<li class="breadcrumb-item active">Filières</li>
+	</ol>
+
+	<div class="container" role="main">
+
+		<h2 class="text-center">Filières</h2>
+
+		<br />
+		<button class="btn bouton-formulaire-nouveau"
+			data-form="#formFiliere"
+			th:attr="data-url=@{/filieres/formulaire_filiere}">
+			<span class="glyphicon glyphicon-plus" />
+			nouvelle filière
+		</button>
+
+
+		<table class="table">
+			<tr>
+				<th scope="col">filière</th>
+				<th scope="col">semestres</th>
+			</tr>
+
+			<tr th:each="filiere : ${filieres}">
+				<td>
+					<span th:text="${filiere.nom}" />
+					<a href="#"
+						class="bouton-formulaire-modif glyphicon glyphicon-pencil hover-display"
+						data-toggle="tooltip" title="modifier la filière"
+						data-form="#formFiliere"
+						th:attr="data-url=@{'/filieres/formulaire_filiere/' + ${filiere.id}}" />
+				</td>
+				<td>
+					<span
+						th:text="${filiere.nbSemestres + ' semestre' + (filiere.nbSemestres>1?'s':'')}" />
+					<a data-toggle="tooltip" title="voir semestres"
+						th:href="@{'/filieres/' + ${filiere.id} + '/semestres'}"
+						class="glyphicon glyphicon-list hover-display" />
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<th:block th:replace="fragments/footer :: footer" />
+
+	<div id="modalForm" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Filière</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<form class="ajax-form" id="formFiliere" />
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-success bouton-creer"
+						data-form="#formFiliere"
+						th:attr="data-url=@{/filieres/creer_filiere}">
+						<span class="glyphicon glyphicon-ok" />
+						créer
+					</button>
+					<button class="btn btn-success bouton-modifier"
+						data-form="#formFiliere"
+						th:attr="data-url=@{/filieres/modifier_filiere}">
+						<span class="glyphicon glyphicon-ok" />
+						modifier
+					</button>
+					<button class="btn btn-danger bouton-supprimer"
+						data-form="#formFiliere"
+						th:attr="data-url=@{/filieres/supprimer_filiere}">
+						<span class="glyphicon glyphicon-trash" />
+						supprimer
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div
+		class="alert alert-warning alert-dismissible fade show app-message" />
+
+	<th:block th:replace="fragments/js_includes :: js_includes" />
+
+</body>
+
+</html>
+

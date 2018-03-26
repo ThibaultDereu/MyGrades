@@ -1,0 +1,7 @@
+
+<form th:object="${filiereModel}">
+	<label for="nom">nom :</label>
+	<input type="text" id="nom" name="nom" class="form-control" autofocus="autofocus" th:value="*{nom}" />
+	<small class="text-danger" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></small>
+	<input type="hidden" id="id" name="id" th:value="*{id}" />
+</form>

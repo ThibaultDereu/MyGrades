@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+		<li class="breadcrumb-item active">Modules</li>
+	</ol>
+
+	<div class="container">
+
+		<h2 class="text-center">Modules</h2>
+		<br />
+
+		<button class="btn bouton-formulaire-nouveau" data-form="#formModule"
+			th:attr="data-url=@{/modules/formulaire_module}">
+			<span class="glyphicon glyphicon-plus" />
+			nouveau module
+		</button>
+
+
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">code</th>
+					<th scope="col">nom</th>
+					<th scope="col">enseignant</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="module : ${modules}" class="bouton-formulaire-modif"
+					th:attr="data-url=@{'/modules/formulaire_module/' + ${module.id}}" 
+					data-form="#formModule">
+					<td th:text="${module.code}" />
+					<td th:text="${module.nom}" />
+					<td><span th:if="${module.idEnseignant}" th:text="${module.prenomEnseignant + ' ' + #strings.toUpperCase(module.nomEnseignant)}" /></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+	<div id="modalForm" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Module</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<form id="formModule" class="ajax-form" />
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-success bouton-creer"
+						data-form="#formModule"
+						th:attr="data-url=@{/modules/creer_module}">
+						<span class="glyphicon glyphicon-ok" />
+						créer
+					</button>
+					<button class="btn btn-success bouton-modifier"
+						data-form="#formModule"
+						th:attr="data-url=@{/modules/modifier_module}">
+						<span class="glyphicon glyphicon-ok" />
+						modifier
+					</button>
+					<button class="btn btn-danger bouton-supprimer"
+						data-form="#formModule"
+						th:attr="data-url=@{/modules/supprimer_module}">
+						<span class="glyphicon glyphicon-trash" />
+						supprimer
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<th:block th:replace="fragments/footer :: footer" />
+
+	<div
+		class="alert alert-warning alert-dismissible fade show app-message" />
+
+	<th:block th:replace="fragments/js_includes :: js_includes" />
+
+</body>
+
+</html>

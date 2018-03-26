@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+	<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+	
+	<br />
+
+	<div class="container col-6" role="main">
+		
+		<p class="lead">Bienvenue dans l'application Mygrades !</p>
+		<hr class="my-4" />
+		
+		<p>C'est une application de <strong>gestion de notes.</strong></p>
+		
+		<p>Vous pouvez créer des <strong>filières d'enseignement</strong> et gérer leur contenu si vous êtes <strong>administrateur</strong>.</p>
+		
+		<p>Si vous êtes <strong>enseignant</strong>, vous pouvez <strong>inscrire des étudiants</strong>, <strong>créer des devoirs</strong> 
+		liés à des enseignements, et donner des <strong>notes</strong> aux étudiants.</p>
+		
+		<p>Si vous êtes <strong>étudiant</strong>, vous pouvez consulter vos notes, et utiliser le <strong>simulateur</strong> pour estimer vos futures notes.</p>
+	
+	</div>
+	
+	<th:block th:replace="fragments/footer :: footer" />
+	
+	<th:block th:replace="fragments/js_includes :: js_includes" />
+	
+</body>
+
+</html>
+

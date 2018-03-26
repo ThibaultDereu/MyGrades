@@ -1,0 +1,50 @@
+
+<form th:object="${utilisateur}">
+	<input type="hidden" id="id" name="id" th:value="*{id}" />
+
+	<div class="form-group form-row">
+		<label for="email" class="col-sm-3 col-form-label">e-mail</label>
+		<div class="col-sm-9">
+			<input type="email" id="email" name="email" class="form-control"
+				placeholder="adresse e-mail" th:value="*{email}"></input>
+			<small class="text-danger" th:if="${#fields.hasErrors('email')}"
+				th:errors="*{email}"></small>
+		</div>
+	</div>
+
+	<div class="form-group form-row">
+		<label for="password" class="col-sm-3 col-form-label">mot de
+			passe</label>
+		<div class="col-sm-9">
+			<input type="password" id="password" name="password"
+				class="form-control" placeholder="mot de passe"
+				th:value="*{password}" data-toggle="tooltip"
+				title="Laisser blanc pour garder le même mot de passe."></input>
+		</div>
+	</div>
+
+	<div class="form-group form-row">
+		<label for="prenom" class="col-sm-3 col-form-label">prénom</label>
+		<div class="col-sm-9">
+			<input type="text" id="prenom" name="prenom" class="form-control"
+				placeholder="prénom" th:value="*{prenom}"></input>
+			<small class="text-danger" th:if="${#fields.hasErrors('prenom')}"
+				th:errors="*{prenom}"></small>
+		</div>
+	</div>
+
+	<div class="form-group form-row">
+		<label for="nom" class="col-sm-3 col-form-label">nom</label>
+		<div class="col-sm-9">
+			<input type="text" id="nom" name="nom" class="form-control"
+				placeholder="nom" th:value="*{nom}"></input>
+			<small class="text-danger" th:if="${#fields.hasErrors('nom')}"
+				th:errors="*{nom}"></small>
+		</div>
+	</div>
+
+	<div class="form-group form-row">
+		<label for="admin" class="col-sm-3 col-form-label">administrateur</label>
+		<input type="checkbox" id="admin" name="admin" th:field="*{admin}" />
+	</div>
+</form>

@@ -1,0 +1,22 @@
+
+<form th:object="${etudiant}">
+	<input type="hidden" id="idUtilisateur" name="idUtilisateur" th:value="*{idUtilisateur}" />
+	<input type="hidden" id="id" name="id" th:value="*{id}" />
+	
+	<div class="form-group form-row">
+		<label for="utilisateur" class="col-sm-3 col-form-label">utilisateur</label>
+		<div class="col-sm-9 form-row">
+			<input type="text" id="prenom" name="prenom" class="form-control-plaintext col-sm-6" th:value="*{prenom}"></input>
+			<input type="text" id="nom" name="nom" class="form-control-plaintext col-sm-6" th:value="*{#strings.toUpperCase(nom)}"></input>
+		</div>
+	</div>
+	
+	<div class="form-group form-row">
+		<label for="numero" class="col-sm-3 col-form-label">numero</label>
+		<div class="col-sm-9">
+			<input type="text" id="numero" name="numero" class="form-control" placeholder="numéro d'étudiant" th:value="*{numero}"></input>
+			<small class="text-danger" th:if="${#fields.hasErrors('numero')}" th:errors="*{numero}"></small>
+		</div>
+	</div>
+	
+</form>

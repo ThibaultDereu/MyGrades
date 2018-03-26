@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+		<li class="breadcrumb-item active">Filières</li>
+	</ol>
+
+	<div class="container" role="main">
+
+		<h2 class="text-center">Filières</h2>
+		<br />
+
+		<div class="container" role="main">
+			
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">filière</th>
+						<th scope="col">sessions actives</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="filiere : ${filieres}" class="bouton-load-url"
+						th:attr="data-url=@{'filieres_sessions/' + ${filiere.id} + '/sessions'}">
+						<td th:text="${filiere.nom}" />
+						<td th:text="${filiere.nbSessions}" />
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+
+	<th:block th:replace="fragments/footer :: footer" />
+
+	<div
+		class="alert alert-warning alert-dismissible fade show app-message" />
+
+	<th:block th:replace="fragments/js_includes :: js_includes" />
+
+</body>
+
+</html>
+

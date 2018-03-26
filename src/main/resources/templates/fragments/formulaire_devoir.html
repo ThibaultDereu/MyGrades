@@ -1,0 +1,29 @@
+
+<form th:object="${devoir}">
+	<input type="hidden" id="id" name="id" th:value="*{id}" />
+	<input type="hidden" id="idModule" name="idModule" th:value="*{idModule}" />
+	
+	<div class="form-group form-row">
+		<label for="nomModule" class="col-sm-3 col-form-label">Module</label>
+		<div class="col-sm-9 form-row">
+			<input type="text" id="nomModule" name="nomModule" class="form-control-plaintext" th:value="*{nomModule}"></input>
+		</div>
+	</div>
+	
+	<div class="form-group form-row">
+		<label for="nom" class="col-sm-3 col-form-label">nom</label>
+		<div class="col-sm-9">
+			<input type="text" id="nom" name="nom" class="form-control" placeholder="nom du devoir" th:value="*{nom}"></input>
+			<small class="text-danger" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></small>
+		</div>
+	</div>
+	
+	<div class="form-group form-row">
+		<label for="coefficient" class="col-sm-3 col-form-label">coefficient</label>
+		<div class="col-sm-6">
+			<input type="number" id="coefficient" name="coefficient" min="0" class="form-control" placeholder="coefficient" th:value="*{coefficient}"></input>
+			<small class="text-danger" th:if="${#fields.hasErrors('coefficient')}" th:errors="*{coefficient}"></small>
+		</div>
+	</div>
+			
+</form>

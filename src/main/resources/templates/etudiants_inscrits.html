@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item">
+			<a th:href="@{/}">Home</a>
+		</li>
+		<li class="breadcrumb-item">
+			<a th:href="@{/filieres_sessions}">Filières</a>
+		</li>
+		<li class="breadcrumb-item">
+			<a th:href="@{'/filieres_sessions/' + ${idFiliere} + '/sessions'}">sessions</a>
+		</li>
+		<li class="breadcrumb-item active">étudiants</li>
+	</ol>
+
+	<div class="container" role="main">
+
+		<h2 class="text-center"
+			th:text="${'Filière ' + sessionModel.nomFiliere + ' - session ' + sessionModel.nom}">Devoirs</h2>
+		<h4 class="text-center text-muted">Etudiants inscrits</h4>
+
+		<br />
+
+		<form id="form-etudiant" method="post">
+			<input type="hidden" id="input-etudiant" th:value="${idEtudiant}" />
+
+			<select id="select-etudiants" name="select-etudiants"
+				class="selectpicker" title="Ajouter un étudiant..."
+				data-live-search="true">
+				<option th:each="etudiantDispo : ${etudiantsDispo}"
+					th:value="${etudiantDispo.id}"
+					th:text="${etudiantDispo.numero + ' - ' + etudiantDispo.prenom + ' ' + #strings.toUpperCase(etudiantDispo.nom)}" />
+			</select>
+
+			<button id="boutonSubmitEtudiant" type="submit" name="action"
+				value="ajouter" class="btn btn-primary" style="display: none">
+				<span class="glyphicon glyphicon-ok" />
+				Ajouter
+			</button>
+		</form>
+
+
+		<table class="table">
+			<tr>
+				<th scope="col">Etudiant</th>
+				<th scope="col">Modules</th>
+				<th scope="col">Statut</th>
+				<th scope="col">Note</th>
+				<th />
+			</tr>
+
+			<tr th:each="inscription : ${inscriptions}">
+				<td
+					th:text="${inscription.numeroEtudiant + ' - ' + inscription.prenomEtudiant + ' ' + #strings.toUpperCase(inscription.nomEtudiant)}" />
+				<td>
+					<span th:text="${inscription.nbModules}" />
+					<a href="#" class="glyphicon glyphicon-list hover-display"
+						data-toggle="tooltip" title="gérer les modules"
+						th:href="@{'/filieres_sessions/' + ${idFiliere}+ '/sessions/' + ${sessionModel.id} + '/etudiants/' + ${inscription.id} + '/modules'}" />
+				</td>
+				<td th:text="${inscription.statut}" />
+				<td th:text="${inscription.note}" />
+				<td>
+					<form method="POST" class="hover-display">
+						<input type="hidden" name="idInscriptionSession"
+							th:value="${inscription.id}" />
+						<button type="submit" name="action" value="retirer"
+							class="glyphicon glyphicon-remove text-danger icon-submit" />
+					</form>
+				</td>
+			</tr>
+
+			<tr>
+				<td />
+				<td />
+				<td>
+					<strong th:if="${not #lists.isEmpty(inscriptions)}"
+						th:text="${'Total étudiants : ' + inscriptions.size()}" />
+				</td>
+				<td />
+				<td />
+			</tr>
+		</table>
+
+	</div>
+
+	<th:block th:replace="fragments/footer :: footer" />
+
+	<div
+		class="alert alert-warning alert-dismissible fade show app-message"
+		th:text="${message}" />
+
+</body>
+
+<th:block th:replace="fragments/js_includes :: js_includes" />
+
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		// apparition du bouton d'ajout si un module est sélectionné
+		$("#select-etudiants").on("change", function() {
+			$("#boutonSubmitEtudiant").show();
+		});
+
+	});
+</script>
+
+</html>

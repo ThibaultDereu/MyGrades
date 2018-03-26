@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item">
+			<a th:href="@{/}">Home</a>
+		</li>
+		<li class="breadcrumb-item">
+			<a th:href="@{/filieres_sessions}">Filières</a>
+		</li>
+		<li class="breadcrumb-item">
+			<a th:href="@{'/filieres_sessions/' + ${idFiliere} + '/sessions'}">sessions</a>
+		</li>
+		<li class="breadcrumb-item">
+			<a
+				th:href="@{'/filieres_sessions/' + ${idFiliere} + '/sessions/' + ${idSession} + '/etudiants'}">étudiants</a>
+		</li>
+		<li class="breadcrumb-item active">modules</li>
+	</ol>
+
+	<div class="container" role="main">
+
+		<h2 class="text-center"
+			th:text="${'Filière ' + sessionModel.nomFiliere + ' / Semestre ' + sessionModel.nomSemestre + ' - session ' + sessionModel.nom}" />
+		<h4 class="text-center text-muted"
+			th:text="${inscriptionSession.prenomEtudiant + ' ' + #strings.toUpperCase(inscriptionSession.nomEtudiant)}" />
+
+		<br />
+
+		<form id="form-modules" method="post">
+			<input type="hidden" id="input-module" th:value="${idModule}" />
+
+			<select id="select-modules" name="select-modules"
+				class="selectpicker" title="Ajouter un module..."
+				data-live-search="true">
+				<option th:each="moduleDispo : ${modulesDispo}"
+					th:value="${moduleDispo.id}"
+					th:text="${moduleDispo.code + ' - ' + moduleDispo.nom}" />
+			</select>
+
+			<button id="boutonSubmitModule" type="submit" name="action"
+				value="ajouter" class="btn btn-primary" style="display: none">
+				<span class="glyphicon glyphicon-ok" />
+				Ajouter
+			</button>
+		</form>
+
+
+		<table class="table" id="table-accordion">
+			<tr>
+				<th scope="col">Module</th>
+				<th scope="col">Coefficient</th>
+				<th scope="col">Rattrapable</th>
+				<th scope="col">Note seuil</th>
+				<th scope="col">Statut</th>
+				<th>Note</th>
+				<th />
+			</tr>
+
+			<th:block th:each="module : ${inscriptionsModule}">
+				<tr>
+					<td>
+						<div class="text-primary d-flex justify-content-between"
+							style="cursor: pointer" data-toggle="collapse"
+							th:attr="data-target=${'#collapse-module' + module.id}">
+							<span class=""
+								th:text="${module.codeModule + ' - ' + module.nomModule}"
+								title="voir détail devoirs" />
+							<span class="glyphicon glyphicon-chevron-down hover-display" />
+						</div>
+					</td>
+					<td th:text="${module.coefficient}" />
+					<td>
+						<span th:if="${module.rattrapable}" class="glyphicon glyphicon-ok"></span>
+					</td>
+					<td th:text="${module.noteSeuil}" />
+					<td th:text="${module.statut}" />
+					<td th:text="${module.note}" />
+					<td>
+						<form method="POST" class="hover-display">
+							<input type="hidden" name="idInscriptionModule"
+								th:value="${module.id}" />
+							<button type="submit" name="action" value="retirer"
+								class="glyphicon glyphicon-remove text-danger icon-submit" />
+						</form>
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="7" style="padding: 0; border: 0">
+						<div th:id="${'collapse-module' + module.id}" class="collapse"
+							data-parent="#table-accordion">
+							<ul>
+								<li th:each="devoir : ${module.inscriptionsDevoirs}">
+									<span th:text="${devoir.nomDevoir}" />
+									<span th:text="${'(coeff. ' + devoir.coefficient + ')'}" />
+									<span th:if="${devoir.note}" th:text="${devoir.note + ' / 20'}" />
+								</li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+			</th:block>
+
+
+			<tfoot>
+				<tr>
+					<td>
+						<strong
+							th:text="${'Total modules : ' + inscriptionsModule.size()}" />
+					</td>
+					<td />
+					<td />
+					<td />
+					<td>
+						<strong th:unless="${inscriptionSession.statut} == 'en cours'"
+							th:text="${'Résultat : ' + inscriptionSession.statut}" />
+					</td>
+					<td>
+						<strong th:text="${inscriptionSession.note}" />
+					</td>
+					<td />
+				</tr>
+			</tfoot>
+		</table>
+
+	</div>
+
+	<th:block th:replace="fragments/footer :: footer" />
+
+	<div
+		class="alert alert-warning alert-dismissible fade show app-message"
+		th:text="${message}" />
+
+</body>
+
+<th:block th:replace="fragments/js_includes :: js_includes" />
+
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		// apparition du bouton d'ajout si un module est sélectionné
+		$("#select-modules").on("change", function() {
+			$("#boutonSubmitModule").show();
+		});
+
+	});
+</script>
+
+</html>

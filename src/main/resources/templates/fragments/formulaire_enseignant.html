@@ -1,0 +1,23 @@
+
+<form th:object="${enseignant}">
+	<input type="hidden" id="idUtilisateur" name="idUtilisateur"
+		th:value="*{idUtilisateur}" />
+	<input type="hidden" id="id" name="id" th:value="*{id}" />
+
+	<div class="form-group form-row">
+		<label for="utilisateur" class="col-sm-3 col-form-label">utilisateur</label>
+		<div class="col-sm-9 form-row">
+			<input type="text" id="prenom" name="prenom"
+				class="form-control-plaintext col-sm-6" th:value="*{prenom}"></input>
+			<input type="text" id="nom" name="nom"
+				class="form-control-plaintext col-sm-6"
+				th:value="*{#strings.toUpperCase(nom)}"></input>
+		</div>
+	</div>
+
+<!-- 	<ul> -->
+<!-- 		<li th:each="module: ${enseignant.modules}" -->
+<!-- 			th:text="${module.code + ' - ' + module.nom}"></li> -->
+<!-- 	</ul> -->
+
+</form>

@@ -1,0 +1,67 @@
+
+<form th:object="${module}">
+	<input type="hidden" id="id" name="id" th:value="*{id}" />
+	
+	<div class="form-group form-row">
+		<label for="code" class="col-sm-3 col-form-label">code</label>
+		<div class="col-sm-9">
+			<input type="text" id="code" name="code" class="form-control" placeholder="par exemple, &quot;B350&quot;" th:value="*{code}"></input>
+			<small class="text-danger" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></small>
+		</div>
+	</div>
+
+	<div class="form-group form-row">
+		<label for="nom" class="col-sm-3 col-form-label">nom</label>
+		<div class="col-sm-9">
+			<textarea type="text" id="nom" name="nom" class="form-control" placeholder="par exemple, &quot;Projet de modélisation&quot;" th:field="*{nom}" />
+			<small class="text-danger" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" />
+		</div>
+	</div>
+
+	<div class="form-group form-row">
+		<label for="nbCredits" class="col-sm-3 col-form-label">crédits</label>
+		<div class="col-sm-6">
+			<input type="number" id="nbCredits" name="nbCredits" class="form-control" min="0" placeholder="nombre de crédits" th:value="*{nbCredits}"></input>
+			<small class="text-danger" th:if="${#fields.hasErrors('nbCredits')}" th:errors="*{nbCredits}"></small>
+		</div>
+	</div>
+
+	<div class="form-group form-row">
+		<label for="noteSeuil" class="col-sm-3 col-form-label">note Seuil</label>
+		<div class="col-sm-6">
+			<input type="number" id="noteSeuil" name="noteSeuil" min="0" max="10" class="form-control" placeholder="seuil de compensation" th:value="*{noteSeuil}"></input>
+			<small class="text-danger" th:if="${#fields.hasErrors('noteSeuil')}" th:errors="*{noteSeuil}"></small>
+		</div>
+	</div>
+	
+	<div class="form-group form-row">
+		<label for="coefficient" class="col-sm-3 col-form-label">coefficient</label>
+		<div class="col-sm-6">
+			<input type="number" id="coefficient" name="coefficient" min="0" class="form-control" placeholder="coefficient" th:value="*{coefficient}"></input>
+			<small class="text-danger" th:if="${#fields.hasErrors('coefficient')}" th:errors="*{coefficient}"></small>
+		</div>
+	</div>
+
+
+	<div class="form-group form-row">
+		<label for="optionnel" class="col-sm-3 col-form-label">optionnel</label>
+		<input type="checkbox" id="optionnel" name="optionnel" th:field="*{optionnel}" />
+	</div>
+
+	<div class="form-group form-row">
+		<label for="rattrapable" class="col-sm-3 col-form-label">rattrapable</label>
+		<input type="checkbox" id="rattrapable" name="rattrapable" th:field="*{rattrapable}" />
+	</div>
+	
+	<div class="form-group form-row">
+		<label for="enseignant" class="col-sm-3 col-form-label">enseignant</label>
+		<select th:field="*{idEnseignant}" id="idEnseignant" name="idEnseignant"
+			class="selectpicker" title="Choisissez un enseignant..."
+			data-live-search="true">
+			<option value="" class="text-center">-</option>
+			<option th:each="enseignant : ${enseignants}" th:value="${enseignant.id}"
+				th:text="${enseignant.prenom + ' ' + #strings.toUpperCase(enseignant.nom)}" />
+		</select>
+	</div>
+		
+</form>
