@@ -26,7 +26,16 @@ public class UtilisateursController {
 	
 	@Autowired
 	FilieresService filieresService;
-
+	
+	/**
+	 * Attribut optionMenu pour connaître l'option menu à faire apparaître en actif.
+	 */
+	@ModelAttribute
+	public void ajouterOptionMenu(Model model) {
+		model.addAttribute("optionMenu", "administration");
+		model.addAttribute("optionSousMenu", "utilisateurs");
+	}
+	
 	@GetMapping("/utilisateurs")
 	public String listeUtilisateurs(Model model) {
 

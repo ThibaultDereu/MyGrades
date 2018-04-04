@@ -23,7 +23,7 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
 			+ "JOIN FETCH sem.filiere fil "
 			+ "WHERE fil.id = :idFiliere "
 			+ "AND ses.actif = :actif "
-			+ "ORDER BY ses.dateCloture, sem.nom ")
+			+ "ORDER BY ses.dateCloture desc, sem.nom ")
 	public List<Session> getSessions(@Param("idFiliere") Long idFiliere, @Param("actif") Boolean actif);
 		
 	// récupérer tous les modules pouvant être notés (en cours), et les éventuels devoirs rattachés
@@ -41,7 +41,6 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
 			+ "GROUP BY mod, dev "
 			+ "ORDER BY mod.code, dev.nom ")
 	public List<Tuple> getDevoirsAvecModule(@Param("idSession") Long idSession);
-		
 	
 	@Query("SELECT inscS.id AS id, etu.numero AS numeroEtudiant, uti.prenom AS prenomEtudiant, uti.nom AS nomEtudiant, "
 			+ "COUNT(inscM) AS nbModules, inscS.termine AS termine, inscS.acquis AS acquis, inscS.note AS note "

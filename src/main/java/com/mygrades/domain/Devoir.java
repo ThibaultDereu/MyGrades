@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class Devoir {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nom;
 	private Integer coefficient;
@@ -18,16 +18,37 @@ public class Devoir {
 	private Session session;
 	@OneToOne
 	private Module module;
-	
-	protected Devoir() {}
+
+	protected Devoir() {
+	}
 
 	public Devoir(Session session, Module module, int coefficient) {
+
+		// refuser de créer un devoir s'il n'y a pas d'étudiant à noter.
+		boolean modulePresent = false;
+
+		for (InscriptionSession inscS : session.getInscriptionsSession()) {
+			for (InscriptionModule inscM : inscS.getInscriptionsModule()) {
+				if (!inscM.isTermine() && inscM.getModule() == module) {
+					modulePresent = true;
+					break;
+				}
+			}
+			if (modulePresent)
+				break;
+		}
+
+		if (!modulePresent) {
+			throw new IllegalArgumentException(
+					"Impossible de créer ce devoir car aucun étudiant n'a d'inscription en cours sur ce module.");
+		}
+
 		this.session = session;
 		this.module = module;
 		this.coefficient = coefficient;
 		session.ajouterDevoir(this);
 	}
-	
+
 	public String getNom() {
 		return nom;
 	}
@@ -41,9 +62,9 @@ public class Devoir {
 	}
 
 	public void setCoefficient(Integer coefficient) {
-		
+
 		this.coefficient = coefficient;
-		
+
 		// comme le coefficient a changé, les notes liées à ce devoir doivent changer
 		// mettre à jour les notes de toutes les inscriptions modules contenant
 		for (InscriptionSession inscSess : this.session.getInscriptionsSession()) {
@@ -53,17 +74,17 @@ public class Devoir {
 				}
 			}
 		}
-		
+
 	}
 
 	public Session getSession() {
 		return session;
 	}
-	
+
 	public Module getModule() {
 		return module;
 	}
-	
+
 	public String toString() {
 		return String.format("devoir sur le module %s", this.module);
 	}

@@ -31,6 +31,14 @@ public class SessionsController {
 	@Autowired
 	FilieresService filieresService;
 
+	/**
+	 * Attribut optionMenu pour connaître l'option menu à faire apparaître en actif.
+	 */
+	@ModelAttribute
+	public void ajouterOptionMenu(Model model) {
+		model.addAttribute("optionMenu", "sessions");
+	}
+	
 	@GetMapping("/filieres_sessions")
 	public String afficherFilieresSessions(Model model) {
 		List<FiliereSessionsModel> filieres = sessionsService.getAllFilieres();

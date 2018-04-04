@@ -31,6 +31,15 @@ public class FilieresController {
 	FilieresService filieresService;
 	
 	/**
+	 * Attribut optionMenu pour connaître l'option menu à faire apparaître en actif.
+	 */
+	@ModelAttribute
+	public void ajouterOptionMenu(Model model) {
+		model.addAttribute("optionMenu", "administration");
+		model.addAttribute("optionSousMenu", "filieres");
+	}
+	
+	/**
 	 * Liste des filières.
 	 */
 	@GetMapping("/filieres")

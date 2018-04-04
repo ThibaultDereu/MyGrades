@@ -28,7 +28,15 @@ public class DevoirsController {
 
 	@Autowired
 	FilieresService filieresService;
-
+	
+	/**
+	 * Attribut optionMenu pour connaître l'option menu à faire apparaître en actif.
+	 */
+	@ModelAttribute
+	public void ajouterOptionMenu(Model model) {
+		model.addAttribute("optionMenu", "sessions");
+	}
+	
 	@GetMapping("/filieres_sessions/{idFiliere}/sessions/{idSession}/devoirs")
 	public String afficherDevoirs(@PathVariable("idFiliere") String strIdFiliere,
 			@PathVariable("idSession") String strIdSession, Model model) {
@@ -67,10 +75,17 @@ public class DevoirsController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		} else {
 			Long idSession = Long.parseLong(strIdSession);
-			sessionsService.creerDevoir(idSession, devoir);
-			response.setStatus(HttpServletResponse.SC_OK);
-			response.setHeader("appMessage", String.format("Le devoir %s a été créé dans le module %s.",
-					devoir.getNom(), devoir.getNomModule()));
+			
+			try {
+				sessionsService.creerDevoir(idSession, devoir);
+				response.setStatus(HttpServletResponse.SC_OK);
+				response.setHeader("appMessage", String.format("Le devoir %s a été créé dans le module %s.",
+						devoir.getNom(), devoir.getNomModule()));
+			} catch (IllegalArgumentException e) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setHeader("appMessage", e.getMessage());
+			}
+			
 		}
 
 		return "fragments/formulaire_devoir";

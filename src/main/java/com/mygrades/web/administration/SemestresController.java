@@ -25,6 +25,15 @@ public class SemestresController {
 
 	@Autowired
 	FilieresService filieresService;
+	
+	/**
+	 * Attribut optionMenu pour connaître l'option menu à faire apparaître en actif.
+	 */
+	@ModelAttribute
+	public void ajouterOptionMenu(Model model) {
+		model.addAttribute("optionMenu", "administration");
+		model.addAttribute("optionSousMenu", "filieres");
+	}
 
 	/**
 	 * Liste des semestres d'une filière.

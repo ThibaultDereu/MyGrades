@@ -29,4 +29,19 @@ public interface InscriptionSessionRepository extends CrudRepository<Inscription
 			+ "WHERE inscS.id = :idInscriptionSession")
 	public InscriptionSession getInscriptionSession(@Param("idInscriptionSession") Long idInscriptionSession);
 	
+	@Query("SELECT inscS "
+			+ "FROM InscriptionSession inscS "
+			+ "JOIN FETCH inscS.session ses "
+			+ "JOIN FETCH ses.semestre sem "
+			+ "JOIN FETCH inscS.calculateur calcS "
+			+ "JOIN FETCH inscS.inscriptionsModule inscM "
+			+ "JOIN FETCH inscM.module modu "
+			+ "JOIN FETCH inscM.calculateur calcM "
+			+ "JOIN FETCH inscM.inscriptionsDevoir inscD "
+			+ "JOIN FETCH inscD.devoir dev "
+			+ "JOIN FETCH inscD.calculateur calcD "
+			+ "WHERE inscS.id = :idInscriptionSession "
+			+ "ORDER BY modu.code, dev.nom")
+	public InscriptionSession getInscriptionSessionComplete(@Param("idInscriptionSession") Long idInscriptionSession);
+	
 }

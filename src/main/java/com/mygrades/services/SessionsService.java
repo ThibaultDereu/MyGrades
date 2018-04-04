@@ -145,19 +145,13 @@ public class SessionsService {
 		repSession.delete(idSession);
 
 	}
-	
-	// pour debugger
-    @PersistenceContext
-    private EntityManager em;
-    
+	    
     
 	@Transactional
 	public void cloturerSession(Long idSession) {
 		
 		Session session = repSession.findOne(idSession);
 		session.cloturer();
-
-		
 		repSession.save(session);
 		
 	}
@@ -211,7 +205,7 @@ public class SessionsService {
 		return modulesAvecDevoirs;
 
 	}
-
+	
 	@Transactional
 	public void creerDevoir(Long idSession, DevoirModel devoirModel) {
 
@@ -226,6 +220,8 @@ public class SessionsService {
 		}
 
 	}
+	
+
 
 	public void injecteModuleDansDevoir(DevoirModel devoir, Long idModule) {
 
@@ -291,14 +287,8 @@ public class SessionsService {
 			inscModel.setNote(insc.get("note", Double.class));
 			inscModel.setNumeroEtudiant(insc.get("numeroEtudiant", String.class));
 			inscModel.setPrenomEtudiant(insc.get("prenomEtudiant", String.class));
-
-			if (insc.get("termine", Boolean.class) == false) {
-				inscModel.setStatut("en cours");
-			} else if (insc.get("acquis", Boolean.class) == true) {
-				inscModel.setStatut("acquis");
-			} else {
-				inscModel.setStatut("non aquis");
-			}
+			inscModel.setTermine(insc.get("termine", Boolean.class));
+			inscModel.setAcquis(insc.get("acquis", Boolean.class));
 
 			inscriptionsModel.add(inscModel);
 
@@ -373,16 +363,8 @@ public class SessionsService {
 			inscMM.setRattrapable(mod.isRattrapable());
 			inscMM.setId(inscM.getId());
 			inscMM.setNote(inscM.getNote());
-			
-			String statut;
-			if (!inscM.isTermine()) {
-				statut = "en cours";
-			} else if (inscM.isAcquis()) {
-				statut = "acquis";
-			} else {
-				statut = "non acquis";
-			}
-			inscMM.setStatut(statut);
+			inscMM.setAcquis(inscM.isAcquis());
+			inscMM.setTermine(inscM.isTermine());
 			
 			List<InscriptionDevoirModel> inscriptionsDevoirModel = new ArrayList<>();
 			for (InscriptionDevoir inscD : inscM.getInscriptionsDevoir()) {
@@ -418,19 +400,13 @@ public class SessionsService {
 		
 		inscSM.setId(inscS.getId());
 		inscSM.setNote(inscS.getNote());
-				
+		inscSM.setAcquis(inscS.isAcquis());
+		inscSM.setTermine(inscS.isTermine());
+		
 		Utilisateur uti = inscS.getEtudiant().getUtilisateur();
 		inscSM.setNomEtudiant(uti.getNom());
 		inscSM.setPrenomEtudiant(uti.getPrenom());
-		
-		if (!inscS.isTermine()) {
-			inscSM.setStatut("en cours");
-		} else if (inscS.isAcquis()) {
-			inscSM.setStatut("acquis");
-		} else {
-			inscSM.setStatut("non aquis");
-		}
-				
+						
 		return inscSM;
 		
 	}

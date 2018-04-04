@@ -8,22 +8,23 @@
 			<div class="navbar-nav">
 				<div class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
-						th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/utilisateurs')
-							or #strings.startsWith(#httpServletRequest.getRequestURI(), '/modules')
-							or #strings.startsWith(#httpServletRequest.getRequestURI(), '/filieres') ? 'active' : ''}">
+						th:classappend="${optionMenu == 'administration' ? 'active' : ''}">
 						Administration </a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" th:href="@{/utilisateurs}"
-							th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/utilisateurs') ? 'active':''}">Utilisateurs</a>
+							th:classappend="${optionSousMenu == 'utilisateurs' ? 'active' : ''}">Utilisateurs</a>
 						<a class="dropdown-item" th:href="@{/modules}"
-							th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/modules') ? 'active':''}">Modules</a>
+							th:classappend="${optionSousMenu == 'modules' ? 'active' : ''}">Modules</a>
 						<a class="dropdown-item" th:href="@{/filieres}"
-							th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/filieres') ? 'active':''}">Filières</a>
+							th:classappend="${optionSousMenu == 'filieres' ? 'active' : ''}">Filières</a>
 					</div>
 				</div>
 
-				<a class="nav-item nav-link" th:href="@{/filieres_sessions}">Sessions</a>
-				<a class="nav-item nav-link" th:href="@{/x}">Mes notes</a>
+				<a class="nav-item nav-link" th:href="@{/filieres_sessions}"
+					th:classappend="${optionMenu == 'sessions' ? 'active' : ''}">Sessions</a>
+				<a class="nav-item nav-link" th:href="@{/x}"
+					th:classappend="${optionMenu == 'mesNotes' ? 'active' : ''}">Mes
+					notes</a>
 			</div>
 
 			<div class="navbar-nav">

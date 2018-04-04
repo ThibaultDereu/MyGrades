@@ -34,7 +34,7 @@
 
 		<br />
 
-		<form id="form-modules" method="post">
+		<form id="form-modules" method="post" th:if="${!inscriptionSession.termine}">
 			<input type="hidden" id="input-module" th:value="${idModule}" />
 
 			<select id="select-modules" name="select-modules"
@@ -73,7 +73,8 @@
 							<span class=""
 								th:text="${module.codeModule + ' - ' + module.nomModule}"
 								title="voir détail devoirs" />
-							<span class="glyphicon glyphicon-chevron-down hover-display" />
+							<span th:if="${module.inscriptionsDevoirs.size() > 0}"
+								class="glyphicon glyphicon-chevron-down hover-display" />
 						</div>
 					</td>
 					<td th:text="${module.coefficient}" />
@@ -81,10 +82,11 @@
 						<span th:if="${module.rattrapable}" class="glyphicon glyphicon-ok"></span>
 					</td>
 					<td th:text="${module.noteSeuil}" />
-					<td th:text="${module.statut}" />
+					<td th:text="${!module.termine ? 'en cours' : (module.acquis ? 'acquis' : 'non acquis')}"
+						th:classappend="${!module.termine ? '' : (module.acquis ? 'text-success' : 'text-danger')}" />
 					<td th:text="${module.note}" />
 					<td>
-						<form method="POST" class="hover-display">
+						<form th:if="${!module.termine}" method="POST" class="hover-display">
 							<input type="hidden" name="idInscriptionModule"
 								th:value="${module.id}" />
 							<button type="submit" name="action" value="retirer"
@@ -101,7 +103,7 @@
 								<li th:each="devoir : ${module.inscriptionsDevoirs}">
 									<span th:text="${devoir.nomDevoir}" />
 									<span th:text="${'(coeff. ' + devoir.coefficient + ')'}" />
-									<span th:if="${devoir.note}" th:text="${devoir.note + ' / 20'}" />
+									<span th:if="${devoir.note != null}" th:text="${devoir.note + ' / 20'}" />
 								</li>
 							</ul>
 						</div>
@@ -120,8 +122,8 @@
 					<td />
 					<td />
 					<td>
-						<strong th:unless="${inscriptionSession.statut} == 'en cours'"
-							th:text="${'Résultat : ' + inscriptionSession.statut}" />
+						<strong th:if="${inscriptionSession.termine}"
+							th:text="${'Résultat : ' + (inscriptionSession.acquis ? 'acquis' : 'non acquis')}" />
 					</td>
 					<td>
 						<strong th:if="${inscriptionSession.note}"

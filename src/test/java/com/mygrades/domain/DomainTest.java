@@ -169,13 +169,13 @@ public class DomainTest {
 		s1.addModule(m1);
 		m1.setOptionnel(false);
 		Session sess = new Session(s1, "sess");
-		Devoir d1 = new Devoir(sess, m1, 1);
-		Devoir d2 = new Devoir(sess, m1, 1);
 		Etudiant e1 = new Etudiant();
 		Etudiant e2 = new Etudiant();
 		InscriptionSession is1 = new InscriptionSession(sess, e1);
 		InscriptionSession is2 = new InscriptionSession(sess, e2);
-
+		Devoir d1 = new Devoir(sess, m1, 1);
+		Devoir d2 = new Devoir(sess, m1, 1);
+		
 		InscriptionModule im1 = is1.getInscriptionsModule().iterator().next();
 		Set<Devoir> devoirs = new HashSet<>();
 		for (InscriptionDevoir id : im1.getInscriptionsDevoir()) {
@@ -303,9 +303,16 @@ public class DomainTest {
 		m3.setCoefficient(2);
 		s1.addModule(m3);
 		m3.setOptionnel(true);
-
-		// créer une session et des devoirs
+		
+		// créer une session et inscrire un étudiant à cette session et à des modules de cette session
 		Session sess = new Session(s1, "s1");
+		Etudiant e1 = new Etudiant();
+		InscriptionSession is1 = new InscriptionSession(sess, e1);
+		InscriptionModule im1 = new InscriptionModule(is1, m1);
+		InscriptionModule im2 = new InscriptionModule(is1, m2);
+		InscriptionModule im3 = new InscriptionModule(is1, m3);
+
+		// créer des devoirs
 		Devoir d11 = new Devoir(sess, m1, 3);
 		Devoir d12 = new Devoir(sess, m1, 1);
 		Devoir d13 = new Devoir(sess, m1, 5);
@@ -315,12 +322,7 @@ public class DomainTest {
 		Devoir d31 = new Devoir(sess, m3, 1);
 		Devoir d32 = new Devoir(sess, m3, 2);
 
-		// inscrire un étudiant à cette session et à des modules de cette session
-		Etudiant e1 = new Etudiant();
-		InscriptionSession is1 = new InscriptionSession(sess, e1);
-		InscriptionModule im1 = new InscriptionModule(is1, m1);
-		InscriptionModule im2 = new InscriptionModule(is1, m2);
-		InscriptionModule im3 = new InscriptionModule(is1, m3);
+		
 		
 		InscriptionDevoir id11 = im1.getInscriptionDevoir(d11);
 		InscriptionDevoir id12 = im1.getInscriptionDevoir(d12);

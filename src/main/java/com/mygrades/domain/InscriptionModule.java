@@ -86,6 +86,7 @@ public class InscriptionModule extends AbstractInscription {
 		this.module = inscriptionModule.getModule();
 		this.termine = true;
 		this.acquis = inscriptionModule.isAcquis();
+		this.note = inscriptionModule.getNote();
 		this.calculateur = new Calculateur(this);
 		inscriptionSession.ajouterInscriptionModule(this);
 	}

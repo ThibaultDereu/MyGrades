@@ -11,7 +11,8 @@ public class InscriptionModuleModel {
 	private Integer coefficient;
 	private Boolean rattrapable;
 	private Double noteSeuil;
-	private String statut;
+	private Boolean acquis;
+	private Boolean termine;
 	private Double note;
 	private List<InscriptionDevoirModel> inscriptionsDevoirs = new ArrayList<>();
 
@@ -66,14 +67,6 @@ public class InscriptionModuleModel {
 		this.noteSeuil = noteSeuil;
 	}
 
-	public String getStatut() {
-		return statut;
-	}
-
-	public void setStatut(String statut) {
-		this.statut = statut;
-	}
-
 	public Double getNote() {
 		return note;
 	}
@@ -88,6 +81,22 @@ public class InscriptionModuleModel {
 
 	public void setInscriptionsDevoirs(List<InscriptionDevoirModel> inscriptionsDevoirs) {
 		this.inscriptionsDevoirs = inscriptionsDevoirs;
+	}
+
+	public Boolean getAcquis() {
+		return acquis;
+	}
+
+	public void setAcquis(Boolean acquis) {
+		this.acquis = acquis;
+	}
+
+	public Boolean getTermine() {
+		return termine;
+	}
+
+	public void setTermine(Boolean termine) {
+		this.termine = termine;
 	}
 
 }

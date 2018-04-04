@@ -18,35 +18,38 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-
 @Entity
 public class InscriptionSession extends AbstractInscription {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private Double note;
 	private boolean termine;
 	private boolean acquis;
-	
-	@ManyToOne(cascade=CascadeType.MERGE)
+
+	@ManyToOne(cascade = CascadeType.MERGE)
 	private Session session;
-	
-	@ManyToOne(cascade=CascadeType.MERGE, optional = false)
-	@JoinColumn(name="etudiant_id")
+
+	@ManyToOne(cascade = CascadeType.MERGE, optional = false)
+	@JoinColumn(name = "etudiant_id")
 	private Etudiant etudiant;
-	
+
 	@OneToOne
 	private Semestre semestre;
-	
-	@OneToOne(mappedBy = "inscription", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+
+	@OneToOne(mappedBy = "inscription", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Calculateur calculateur;
-	
-	@OneToMany(mappedBy="inscriptionSession", orphanRemoval=true, cascade=CascadeType.ALL)
+
+	@OneToMany(mappedBy = "inscriptionSession", orphanRemoval = true, cascade = CascadeType.ALL)
 	private Set<InscriptionModule> inscriptionsModule = new HashSet<>();
-	
-	protected InscriptionSession() {}
-	
+
+	private LocalDateTime dateCloture;
+
+	protected InscriptionSession() {
+	}
+
+
 	public InscriptionSession(Session session, Etudiant etudiant) {
 
 		// contrôles préliminaires
@@ -65,13 +68,13 @@ public class InscriptionSession extends AbstractInscription {
 		// acquises au rattrapage.
 		List<InscriptionSession> inscriptionsSession = this.etudiant.getInscriptionsSession();
 		InscriptionSession lastInscriptionSession = null;
-		LocalDateTime lastDateSession = LocalDateTime.now();
-
+		LocalDateTime lastDateSession = LocalDateTime.MIN;
+		
 		for (InscriptionSession inscS : inscriptionsSession) {
-			if (inscS.getSemestre() == this.semestre) {
-				LocalDateTime dateSession = inscS.getSession().getDateOuverture();
-				if (dateSession.isBefore(lastDateSession)) {
-					lastDateSession = dateSession;
+			LocalDateTime dateCloture = inscS.getSession().getDateCloture();
+			if (inscS.getSemestre() == this.semestre && dateCloture != null) {
+				if (dateCloture.isAfter(lastDateSession)) {
+					lastDateSession = dateCloture;
 					lastInscriptionSession = inscS;
 				}
 			}
@@ -84,6 +87,7 @@ public class InscriptionSession extends AbstractInscription {
 				mapLastInscriptionsModule.put(inscM.getModule(), inscM);
 			}
 		}
+		
 
 		// inscrire d'office l'étudiant aux modules obligatoires
 		// ou faisant partie de la session précédente.
@@ -95,14 +99,15 @@ public class InscriptionSession extends AbstractInscription {
 					// Le module était dans la dernière session et est acquis.
 					InscriptionModule inscM = new InscriptionModule(this, lastInscM);
 				} else if (this.session.getNumeroSession() > 1 && !lastInscM.isRattrapable()) {
-					// Le module était dans la dernière session st ne peut être rattrapé
+					// Le module était dans la dernière session et ne peut être rattrapé
 					// car il s'agit d'une session de rattrapage et le module est non rattrapable
+					// => on fait une recopie : s'il était non acquis, il reste non acquis.
 					InscriptionModule inscM = new InscriptionModule(this, lastInscM);
 				} else {
 					// Le module a été suivi mais pas acquis.
 					InscriptionModule inscM = new InscriptionModule(this, module);
 				}
-			} else if (!module.isOptionnel()) {
+			} else if (this.session.getNumeroSession() == 1 && !module.isOptionnel()) {
 				// le module est obligatoire.
 				InscriptionModule inscM = new InscriptionModule(this, module);
 			}

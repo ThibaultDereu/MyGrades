@@ -54,6 +54,19 @@ public class Calculateur {
 	private Integer sommeCoeff;
 	private Boolean acquisReel;
 	
+	public Double getNoteAcquiseMin() {
+		return noteAcquiseMin;
+	}
+	public Double getNoteAcquiseMax() {
+		return noteAcquiseMax;
+	}
+	public Double getNoteRequiseMin() {
+		return noteRequiseMin;
+	}
+	public Double getNoteRequiseMax() {
+		return noteRequiseMax;
+	}
+	
 	protected Calculateur() {}
 	
 	public Long getId() {
@@ -65,11 +78,22 @@ public class Calculateur {
 	}
 
 	public Calculateur(AbstractInscription inscription) {
+		
 		this.inscription = inscription;
-		this.noteAcquiseMin = 0d;
-		this.noteAcquiseMax = 20d;
+
+		if(this.inscription.getNote() != null) {
+			// cas d'une inscription déjà terminée d'office.
+			this.noteReelle = this.inscription.getNote();
+			this.noteAcquiseMin = this.noteReelle;
+			this.noteAcquiseMax = this.noteReelle;
+		} else {
+			this.noteAcquiseMin = 0d;
+			this.noteAcquiseMax = 20d;
+		}
+		
 		this.noteRequiseMin = 0d;
 		this.noteRequiseMax = 20d;
+		
 	}
 
 	public Double getNoteReelle() {
@@ -145,7 +169,7 @@ public class Calculateur {
 				coeff = insc.getCoefficient();
 				this.sommeCoeff += coeff;
 				Calculateur calcEnfant = insc.getCalculateur();
-				if (calcEnfant.getNoteObjectif() != null) {
+				if (calcEnfant.getNoteObjectif() != null && calcEnfant.getNoteReelle() == null) {
 					// on compte la note objectif comme de l'acquis si elle existe
 					sommeAcquisMin += calcEnfant.getNoteObjectif() * coeff;
 					sommeAcquisMax += calcEnfant.getNoteObjectif() * coeff;
@@ -260,18 +284,24 @@ public class Calculateur {
 
 			double noteReqMinParent = calcParent.noteObjectif != null ? calcParent.noteObjectif
 					: calcParent.noteRequiseMin;
+			
 			double noteReqMaxParent = calcParent.noteObjectif != null ? calcParent.noteObjectif
 					: calcParent.noteRequiseMax;
-
+			
+			Double poidsMinCalculateur = this.inscription.getCoefficient() * (this.noteObjectif == null ? this.noteAcquiseMin : this.noteObjectif);
+			Double poidsMaxCalculateur = this.inscription.getCoefficient() * (this.noteObjectif == null ? this.noteAcquiseMax : this.noteObjectif);
+			
 			pointsRequisMin = noteReqMinParent * calcParent.sommeCoeff
 					- (calcParent.noteAcquiseMax * calcParent.sommeCoeff
-							- this.inscription.getCoefficient() * this.noteAcquiseMax);
+							- poidsMaxCalculateur);
+			
 			this.noteRequiseMin = Math.min(20, pointsRequisMin / this.inscription.getCoefficient());
 
 			double pointsRequisMax;
 			pointsRequisMax = noteReqMaxParent * calcParent.sommeCoeff
 					- (calcParent.noteAcquiseMin * calcParent.sommeCoeff
-							- this.inscription.getCoefficient() * this.noteAcquiseMin);
+							- poidsMinCalculateur);
+			
 			this.noteRequiseMax = pointsRequisMax / this.inscription.getCoefficient();
 
 		}

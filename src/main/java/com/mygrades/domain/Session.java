@@ -1,9 +1,7 @@
 package com.mygrades.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -57,7 +55,7 @@ public class Session {
 		this.numeroSession = session.getNumeroSession() + 1;
 		this.actif = true;
 		this.semestre = session.getSemestre();
-		this.nom = session.nom;
+		this.nom = session.nom + " (rattrapage)";
 	}
 
 	public Set<InscriptionSession> getInscriptionsSession() {
@@ -171,6 +169,7 @@ public class Session {
 		}
 
 		this.actif = false;
+		this.dateCloture = LocalDateTime.now();
 
 		if (this.numeroSession == 1) {
 			this.rattraper();
@@ -188,15 +187,35 @@ public class Session {
 		if (this.actif) {
 			throw new IllegalStateException("impossible de rattraper une session encore active");
 		}
-
-		// on utilise le constructeur de session de rattrapage.
-		Session sess2 = new Session(this);
-
+		
+		// lister les inscriptions sessions rattrapables
+		Set<InscriptionSession> inscriptionsSessionRattrapage = new HashSet<>();
+		
 		for (InscriptionSession inscS : this.getInscriptionsSession()) {
 			if (!inscS.isAcquis()) {
-				InscriptionSession inscS2 = new InscriptionSession(sess2, inscS.getEtudiant());
+				for (InscriptionModule inscM : inscS.getInscriptionsModule()) {
+					if(!inscM.isAcquis() && inscM.isRattrapable()) {
+						inscriptionsSessionRattrapage.add(inscS);
+						break;
+					}
+				}
 			}
 		}
+		
+		// créer une session uniquement s'il existe des inscriptions session rattrapables
+		if (!inscriptionsSessionRattrapage.isEmpty()) {
+			
+			// on utilise le constructeur de session de rattrapage.
+			Session sess2 = new Session(this);
+
+			for (InscriptionSession inscS : inscriptionsSessionRattrapage) {
+				if (!inscS.isAcquis()) {
+					InscriptionSession inscS2 = new InscriptionSession(sess2, inscS.getEtudiant());
+				}
+			}
+			
+		}
+		
 
 	}
 

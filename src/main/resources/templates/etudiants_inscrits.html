@@ -9,14 +9,11 @@
 	<th:block th:replace="fragments/navbar :: navbar" />
 
 	<ol class="breadcrumb">
-		<li class="breadcrumb-item">
-			<a th:href="@{/}">Home</a>
+		<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+		<li class="breadcrumb-item"><a th:href="@{/filieres_sessions}">Filières</a>
 		</li>
-		<li class="breadcrumb-item">
-			<a th:href="@{/filieres_sessions}">Filières</a>
-		</li>
-		<li class="breadcrumb-item">
-			<a th:href="@{'/filieres_sessions/' + ${idFiliere} + '/sessions'}">sessions</a>
+		<li class="breadcrumb-item"><a
+				th:href="@{'/filieres_sessions/' + ${idFiliere} + '/sessions'}">sessions</a>
 		</li>
 		<li class="breadcrumb-item active">étudiants</li>
 	</ol>
@@ -29,7 +26,7 @@
 
 		<br />
 
-		<form id="form-etudiant" method="post">
+		<form th:if="${sessionModel.numeroSession == 1}" id="form-etudiant" method="post">
 			<input type="hidden" id="input-etudiant" th:value="${idEtudiant}" />
 
 			<select id="select-etudiants" name="select-etudiants"
@@ -66,10 +63,13 @@
 						data-toggle="tooltip" title="gérer les modules"
 						th:href="@{'/filieres_sessions/' + ${idFiliere}+ '/sessions/' + ${sessionModel.id} + '/etudiants/' + ${inscription.id} + '/modules'}" />
 				</td>
-				<td th:text="${inscription.statut}" />
-				<td th:if="${inscription.note}" th:text="${#numbers.formatDecimal(inscription.note, 1, 2)}" />
+				<td
+					th:text="${!inscription.termine ? 'en cours' : (inscription.acquis ? 'acquis' : 'non acquis')}"
+					th:classappend="${!inscription.termine ? '' : (inscription.acquis ? 'text-success' : 'text-danger')}" />
+				<td th:if="${inscription.note}"
+					th:text="${#numbers.formatDecimal(inscription.note, 1, 2)}" />
 				<td>
-					<form method="POST" class="hover-display">
+					<form th:if="${!inscription.termine}" method="POST" class="hover-display">
 						<input type="hidden" name="idInscriptionSession"
 							th:value="${inscription.id}" />
 						<button type="submit" name="action" value="retirer"

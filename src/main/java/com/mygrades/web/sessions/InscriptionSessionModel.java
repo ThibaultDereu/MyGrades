@@ -8,7 +8,8 @@ public class InscriptionSessionModel {
 	private String prenomEtudiant;
 	private String nomEtudiant;
 	private Long nbModules;
-	private String statut;
+	private Boolean acquis;
+	private Boolean termine;
 	private Double note;
 	
 	public InscriptionSessionModel() {}
@@ -20,12 +21,7 @@ public class InscriptionSessionModel {
 	public void setNbModules(Long nbModules) {
 		this.nbModules = nbModules;
 	}
-	public String getStatut() {
-		return statut;
-	}
-	public void setStatut(String statut) {
-		this.statut = statut;
-	}
+
 	public Double getNote() {
 		return note;
 	}
@@ -70,6 +66,26 @@ public class InscriptionSessionModel {
 
 	public void setNomEtudiant(String nomEtudiant) {
 		this.nomEtudiant = nomEtudiant;
+	}
+
+
+	public Boolean getAcquis() {
+		return acquis;
+	}
+
+
+	public void setAcquis(Boolean acquis) {
+		this.acquis = acquis;
+	}
+
+
+	public Boolean getTermine() {
+		return termine;
+	}
+
+
+	public void setTermine(Boolean termine) {
+		this.termine = termine;
 	}
 	
 	
