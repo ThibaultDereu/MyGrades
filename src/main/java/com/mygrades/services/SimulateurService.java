@@ -34,8 +34,6 @@ public class SimulateurService {
 
 	public InscriptionSessionModel getInscriptionComplete(Long idInscriptionSession) {
 
-		// InscriptionSession inscS =
-		// repInscriptionSession.findOne(idInscriptionSession);
 		InscriptionSession inscS = repInscriptionSession.getInscriptionSessionComplete(idInscriptionSession);
 		InscriptionSessionModel inscSM = new InscriptionSessionModel();
 
