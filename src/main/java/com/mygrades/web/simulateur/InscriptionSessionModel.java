@@ -11,6 +11,7 @@ public class InscriptionSessionModel {
 	private String prenomEtudiant;
 	private String nomEtudiant;
 	private Integer coefficient;
+	private String nomFiliere;
 	private CalculateurModel calculateur;
 	private List<InscriptionModuleModel> inscriptionsModule = new ArrayList<>();
 
@@ -78,4 +79,11 @@ public class InscriptionSessionModel {
 		this.coefficient = coefficient;
 	}
 
+	public String getNomFiliere() {
+		return nomFiliere;
+	}
+
+	public void setNomFiliere(String nomFiliere) {
+		this.nomFiliere = nomFiliere;
+	}
 }

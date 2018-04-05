@@ -43,6 +43,7 @@ public class SimulateurService {
 		inscSM.setPrenomEtudiant(inscS.getEtudiant().getUtilisateur().getPrenom());
 		inscSM.setNomEtudiant(inscS.getEtudiant().getUtilisateur().getNom());
 		inscSM.setCoefficient(inscS.getCoefficient());
+		inscSM.setNomFiliere(inscS.getSemestre().getFiliere().getNom());
 		inscSM.setCalculateur(genererCalculateurModel(inscS.getCalculateur()));
 
 		Set<InscriptionModuleModel> setInscMM = new HashSet<>();

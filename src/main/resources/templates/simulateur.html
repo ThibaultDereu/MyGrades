@@ -17,6 +17,7 @@
 	<div class="container" role="main" th:object="${inscriptionSession}">
 
 		<div class="text-center">
+			<h3><strong th:text="${inscriptionSession.nomFiliere}" /></h3> 
 			<h3 th:text="${'Session ' + inscriptionSession.nomSession}" />
 			<h4 class="text-muted"
 				th:text="${inscriptionSession.prenomEtudiant + ' ' + #strings.toUpperCase(inscriptionSession.nomEtudiant)}" />

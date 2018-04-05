@@ -8,15 +8,17 @@ public class InscriptionSessionSimpleModel {
 	private String nomEtudiant;
 	private String nomSemestre;
 	private String nomSession;
+	private String nomFiliere;
 
 	public InscriptionSessionSimpleModel(Long id, String numeroEtudiant, String prenomEtudiant, String nomEtudiant,
-			String nomSemestre, String nomSession) {
+			String nomSemestre, String nomSession, String nomFiliere) {
 		this.id = id;
 		this.numeroEtudiant = numeroEtudiant;
 		this.prenomEtudiant = prenomEtudiant;
 		this.nomEtudiant = nomEtudiant;
 		this.nomSemestre = nomSemestre;
 		this.nomSession = nomSession;
+		this.nomFiliere = nomFiliere;
 	}
 
 	public Long getId() {
@@ -65,6 +67,14 @@ public class InscriptionSessionSimpleModel {
 
 	public void setNomSession(String nomSession) {
 		this.nomSession = nomSession;
+	}
+
+	public String getNomFiliere() {
+		return nomFiliere;
+	}
+
+	public void setNomFiliere(String nomFiliere) {
+		this.nomFiliere = nomFiliere;
 	}
 
 }

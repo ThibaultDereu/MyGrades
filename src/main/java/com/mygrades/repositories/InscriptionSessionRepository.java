@@ -34,6 +34,7 @@ public interface InscriptionSessionRepository extends CrudRepository<Inscription
 			+ "FROM InscriptionSession inscS "
 			+ "JOIN FETCH inscS.session ses "
 			+ "JOIN FETCH ses.semestre sem "
+			+ "JOIN FETCH sem.filiere fil "
 			+ "JOIN FETCH inscS.calculateur calcS "
 			+ "LEFT JOIN FETCH inscS.inscriptionsModule inscM "
 			+ "LEFT JOIN FETCH inscM.module modu "
@@ -47,9 +48,11 @@ public interface InscriptionSessionRepository extends CrudRepository<Inscription
 			+ "ORDER BY modu.code, dev.nom")
 	public InscriptionSession getInscriptionSessionComplete(@Param("idInscriptionSession") Long idInscriptionSession);
 	
-	@Query("SELECT NEW com.mygrades.web.simulateur.InscriptionSessionSimpleModel(inscS.id, etu.numero, uti.prenom, uti.nom, sem.nom, ses.nom) "
+	@Query("SELECT NEW com.mygrades.web.simulateur.InscriptionSessionSimpleModel(inscS.id, etu.numero, uti.prenom, "
+			+ "  uti.nom, sem.nom, ses.nom, fil.nom) "
 			+ "FROM InscriptionSession inscS "
 			+ "JOIN inscS.semestre sem "
+			+ "JOIN sem.filiere fil "
 			+ "JOIN inscS.session ses "
 			+ "JOIN inscS.etudiant etu "
 			+ "JOIN etu.utilisateur uti "

@@ -24,6 +24,7 @@
 				<thead>
 					<tr>
 						<th scope="col">Etudiant</th>
+						<th scope="col">Filière</th>
 						<th scope="col">Semestre</th>
 						<th scope="col">Session</th>
 					</tr>
@@ -33,6 +34,7 @@
 					<tr th:each="insc : ${inscriptionsSession}" class="bouton-load-url"
 						th:attr="data-url=@{'simulateur/' + ${insc.id}}">
 						<td th:text="${insc.numeroEtudiant + ' - ' + insc.prenomEtudiant + ' ' + #strings.toUpperCase(insc.nomEtudiant)}" />
+						<td th:text="${insc.nomFiliere}" />
 						<td th:text="${insc.nomSemestre}" />
 						<td th:text="${insc.nomSession}" />
 						
