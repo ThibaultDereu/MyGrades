@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8" />
+</head>
+
+<body>
+
+	<th:block th:replace="fragments/navbar :: navbar" />
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+		<li class="breadcrumb-item active">Etudiants</li>
+	</ol>
+
+	<div class="container" role="main">
+
+		<h3 class="text-center">Etudiants avec une session en cours</h3>
+		<br />
+	
+		<div class="container" role="main">
+			
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Etudiant</th>
+						<th scope="col">Semestre</th>
+						<th scope="col">Session</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="insc : ${inscriptionsSession}" class="bouton-load-url"
+						th:attr="data-url=@{'simulateur/' + ${insc.id}}">
+						<td th:text="${insc.numeroEtudiant + ' - ' + insc.prenomEtudiant + ' ' + #strings.toUpperCase(insc.nomEtudiant)}" />
+						<td th:text="${insc.nomSemestre}" />
+						<td th:text="${insc.nomSession}" />
+						
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+
+	<th:block th:replace="fragments/footer :: footer" />
+
+	<div
+		class="alert alert-warning alert-dismissible fade show app-message" />
+
+	<th:block th:replace="fragments/js_includes :: js_includes" />
+
+</body>
+
+</html>
+

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mygrades.domain.InscriptionModule;
 import com.mygrades.domain.InscriptionSession;
+import com.mygrades.web.simulateur.InscriptionSessionSimpleModel;
 
 @Repository
 public interface InscriptionSessionRepository extends CrudRepository<InscriptionSession, Long> {
@@ -40,8 +41,20 @@ public interface InscriptionSessionRepository extends CrudRepository<Inscription
 			+ "JOIN FETCH inscM.inscriptionsDevoir inscD "
 			+ "JOIN FETCH inscD.devoir dev "
 			+ "JOIN FETCH inscD.calculateur calcD "
+			+ "JOIN FETCH inscS.etudiant etu "
+			+ "JOIN FETCH etu.utilisateur uti "
 			+ "WHERE inscS.id = :idInscriptionSession "
 			+ "ORDER BY modu.code, dev.nom")
 	public InscriptionSession getInscriptionSessionComplete(@Param("idInscriptionSession") Long idInscriptionSession);
+	
+	@Query("SELECT NEW com.mygrades.web.simulateur.InscriptionSessionSimpleModel(inscS.id, etu.numero, uti.prenom, uti.nom, sem.nom, ses.nom) "
+			+ "FROM InscriptionSession inscS "
+			+ "JOIN inscS.semestre sem "
+			+ "JOIN inscS.session ses "
+			+ "JOIN inscS.etudiant etu "
+			+ "JOIN etu.utilisateur uti "
+			+ "WHERE inscS.termine = false "
+			+ "ORDER BY etu.numero ")
+	public List<InscriptionSessionSimpleModel> getInscriptionsSessionSimples();
 	
 }

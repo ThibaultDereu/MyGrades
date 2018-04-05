@@ -10,20 +10,77 @@
 
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-		<li class="breadcrumb-item"><a th:href="@{/mes_notes/sessions}">Sessions</a>
-		</li>
+		<li class="breadcrumb-item"><a th:href="@{/simulateur}">Etudiants</a></li>
+		<li class="breadcrumb-item active">Simulateur</li>
 	</ol>
 
 	<div class="container" role="main" th:object="${inscriptionSession}">
 
-		<div class="card-columns">
+		<div class="text-center">
+			<h3 th:text="${'Session ' + inscriptionSession.nomSession}" />
+			<h4 class="text-muted"
+				th:text="${inscriptionSession.prenomEtudiant + ' ' + #strings.toUpperCase(inscriptionSession.nomEtudiant)}" />
+		</div>
+		
+		<br />
+		
+		<!-- LE SEMESTRE -->
+		<div class="mx-auto col-6 card">
 
+			<div class="card-body">
+				
+				<div class="d-flex justify-content-between">
+					<h5 th:text="${'Semestre ' + inscriptionSession.nomSemestre}" />
+					<small class="text-muted" th:text="${'coeff ' + inscriptionSession.coefficient}" />
+				</div>
+	
+				<div class="progress border">
+
+					<div class="progress-bar progress-sous-min" style="width: 50%;"
+						th:id="${'progress-sous-min' + inscriptionSession.calculateur.id}" />
+
+					<div class="progress-bar progress-note-variable" style="width: 0%;"
+						th:id="${'progress-note' + inscriptionSession.calculateur.id}">
+
+						<input class="w-100 range-objectif" type="range" min="10" max="10"
+							step="0.5" value="10"
+							th:id="${'range' + inscriptionSession.calculateur.id}"
+							th:attr="data-id=${inscriptionSession.calculateur.id}" />
+
+					</div>
+				</div>
+
+				<div class="text-primary text-center">
+					<span
+						th:id="${'flag-objectif' + inscriptionSession.calculateur.id}"
+						class="glyphicon glyphicon-flag" style="display: none;" />
+					<span class=""
+						th:id="${'caption-note' + inscriptionSession.calculateur.id}" />
+					<span
+						th:id="${'bouton-annuler-objectif' + inscriptionSession.calculateur.id}"
+						th:attr="data-id=${inscriptionSession.calculateur.id}"
+						class="glyphicon glyphicon-remove text-danger hover-display bouton-annuler-objectif icon-submit"
+						style="display: none;" />
+				</div>
+			</div>
+		</div>
+		
+		<br />
+	
+	
+		<div class="card-columns">
+			
+			<!-- LES MODULES -->
 			<div class="card" th:each="inscriptionModule : *{inscriptionsModule}">
 
 				<div class="card-body">
-
-					<h5 class="card-title"
-						th:text="${inscriptionModule.codeModule + ' - ' + inscriptionModule.nomModule}" />
+					
+					<div class="d-flex justify-content-between">
+						<h5 class="card-title"
+							th:text="${inscriptionModule.codeModule + ' - ' + inscriptionModule.nomModule}" />
+						<small class="text-muted" th:text="${'coeff ' + inscriptionModule.coefficient}" />
+					</div>
+						
 
 					<div class="progress border">
 
@@ -58,14 +115,18 @@
 					<small><a th:href="${'#devoirs' + inscriptionModule.id}"
 							data-toggle="collapse">devoirs...</a></small>
 
-
+					
+					<!-- LES DEVOIRS -->
 					<div class="collapse col-11 offset-1"
 						th:id="${'devoirs' + inscriptionModule.id}">
 
 						<th:block
 							th:each="inscriptionDevoir: ${inscriptionModule.inscriptionsDevoir}">
-
-							<h th:text="${inscriptionDevoir.nomDevoir}" />
+							
+							<div class="d-flex justify-content-between">
+								<h th:text="${inscriptionDevoir.nomDevoir}" />
+								<small class="text-muted" th:text="${'coeff ' + inscriptionDevoir.coefficient}" />
+							</div>
 
 							<div class="progress border">
 
@@ -118,141 +179,7 @@
 
 </body>
 
-<script>
-	$(document).ready(function() {
-
-		// initialiser tous les calculateurs
-		var request = $.ajax({
-			type : "GET",
-			url : window.location.href + "/getCalculateurs"
-		});
-
-		request.done(function(htmlResponse, textStatus, jqXHR) {
-			refreshCalculateurs(htmlResponse);
-		});
-
-		request.fail(function(jqXHR) {
-			console.log("échec ajax.");
-		});
-
-		// fixation d'un objectif
-		$(".range-objectif").change(function() {
-
-			var idCalculateur = $(this).data("id");
-			var noteObjectif = $(this).val();
-
-			var request = $.ajax({
-				type : "POST",
-				url : window.location.href + "/setNoteObjectif",
-				data : {
-					"idCalculateur" : idCalculateur,
-					"noteObjectif" : noteObjectif
-				}
-			});
-
-			request.done(function(htmlResponse, textStatus, jqXHR) {
-				refreshCalculateurs(htmlResponse);
-			});
-
-			request.fail(function(jqXHR) {
-				console.log("échec ajax.");
-			});
-		});
-
-		// suppression d'un objectif
-		$(".bouton-annuler-objectif").click(function() {
-
-			var idCalculateur = $(this).data("id");
-
-			var request = $.ajax({
-				type : "POST",
-				url : window.location.href + "/annulerNoteObjectif",
-				data : {
-					"idCalculateur" : idCalculateur
-				}
-			});
-
-			request.done(function(htmlResponse, textStatus, jqXHR) {
-				refreshCalculateurs(htmlResponse);
-			});
-
-			request.fail(function(jqXHR) {
-				console.log("échec ajax.");
-			});
-		});
-
-		// afficher la valeur de range objectif à son utilisation
-		$(".range-objectif").on("input", function() {
-
-			var idCalc = $(this).data("id");
-			var valeur = $(this).val();
-			$("#caption-note" + idCalc).text(valeur);
-
-		});
-
-	});
-
-	function refreshCalculateurs(calculateurs) {
-
-		for ( var index in calculateurs) {
-
-			var calc = calculateurs[index];
-
-			var progressSousMin = $("#progress-sous-min" + calc.id);
-			var progressNote = $("#progress-note" + calc.id);
-			var range = $("#range" + calc.id);
-			var caption = $("#caption-note" + calc.id);
-			var flagObjectif = $("#flag-objectif" + calc.id);
-			var boutonAnnulerObjectif = $("#bouton-annuler-objectif" + calc.id);
-
-			// progress-note : class
-			if (calc.noteMin == calc.noteMax) {
-				progressNote.addClass("progress-note-unique");
-				progressNote.removeClass("progress-note-variable");
-				progressNote.removeClass("progress-note-objectif");
-			} else if (calc.noteObjectif != null) {
-				progressNote.removeClass("progress-note-unique");
-				progressNote.removeClass("progress-note-variable");
-				progressNote.addClass("progress-note-objectif");
-			} else {
-				progressNote.removeClass("progress-note-unique");
-				progressNote.addClass("progress-note-variable");
-				progressNote.removeClass("progress-note-objectif");
-			}
-
-			// range : min, max, value
-			range.attr({
-				"min" : calc.noteMin,
-				"max" : calc.noteMax,
-				"value" : calc.noteObjectif
-			});
-
-			// caption-note : html
-			if (calc.noteMin == calc.noteMax) {
-				flagObjectif.hide();
-				boutonAnnulerObjectif.hide();
-				caption.html(calc.noteMin);
-			} else if (calc.noteObjectif != null) {
-				flagObjectif.show();
-				boutonAnnulerObjectif.show();
-				caption.html(calc.noteObjectif);
-			} else {
-				flagObjectif.hide();
-				boutonAnnulerObjectif.hide();
-				caption.html(calc.noteMin + " -> " + calc.noteMax);
-			}
-
-			// progress-sous-min : change width
-			var pctSousMin = 100 * calc.noteMin / 20 + "%";
-			$(progressSousMin).outerWidth(pctSousMin);
-
-			// progress-note : change width
-			var pctNote = 100 * (calc.noteMax - calc.noteMin) / 20 + "%";
-			$(progressNote).outerWidth(pctNote);
-
-		}
-	}
-</script>
+<script type="text/javascript" th:src="@{/js/simulateur.js}"></script>
 
 </html>
 

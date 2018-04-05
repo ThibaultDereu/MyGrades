@@ -1,4 +1,4 @@
-package com.mygrades.web.mesNotes;
+package com.mygrades.web.simulateur;
 
 public class CalculateurModel {
 	

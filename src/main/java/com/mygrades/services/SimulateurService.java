@@ -1,6 +1,9 @@
 package com.mygrades.services;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +17,11 @@ import com.mygrades.domain.InscriptionModule;
 import com.mygrades.domain.InscriptionSession;
 import com.mygrades.repositories.CalculateurRepository;
 import com.mygrades.repositories.InscriptionSessionRepository;
-import com.mygrades.web.mesNotes.CalculateurModel;
-import com.mygrades.web.mesNotes.InscriptionModuleModel;
-import com.mygrades.web.mesNotes.InscriptionSessionModel;
-import com.mygrades.web.mesNotes.InscriptionDevoirModel;
+import com.mygrades.web.simulateur.CalculateurModel;
+import com.mygrades.web.simulateur.InscriptionDevoirModel;
+import com.mygrades.web.simulateur.InscriptionModuleModel;
+import com.mygrades.web.simulateur.InscriptionSessionModel;
+import com.mygrades.web.simulateur.InscriptionSessionSimpleModel;
 
 @Service
 public class SimulateurService {
@@ -30,14 +34,27 @@ public class SimulateurService {
 
 	public InscriptionSessionModel getInscriptionComplete(Long idInscriptionSession) {
 
-		InscriptionSession inscS = repInscriptionSession.findOne(idInscriptionSession);
+		// InscriptionSession inscS =
+		// repInscriptionSession.findOne(idInscriptionSession);
+		InscriptionSession inscS = repInscriptionSession.getInscriptionSessionComplete(idInscriptionSession);
 		InscriptionSessionModel inscSM = new InscriptionSessionModel();
 
 		inscSM.setId(inscS.getId());
 		inscSM.setNomSemestre(inscS.getSemestre().getNom());
 		inscSM.setNomSession(inscS.getSession().getNom());
+		inscSM.setPrenomEtudiant(inscS.getEtudiant().getUtilisateur().getPrenom());
+		inscSM.setNomEtudiant(inscS.getEtudiant().getUtilisateur().getNom());
+		inscSM.setCoefficient(inscS.getCoefficient());
 		inscSM.setCalculateur(genererCalculateurModel(inscS.getCalculateur()));
-		Set<InscriptionModuleModel> inscriptionsModule = inscSM.getInscriptionsModule();
+
+		Set<InscriptionModuleModel> setInscMM = new HashSet<>();
+
+		// créer des comparateurs pour trier les inscriptions module et devoir.
+		Comparator<InscriptionModuleModel> inscMMComparator = (InscriptionModuleModel i1,
+				InscriptionModuleModel i2) -> i1.getCodeModule().compareTo(i2.getCodeModule());
+
+		Comparator<InscriptionDevoirModel> inscDMComparator = (InscriptionDevoirModel i1,
+				InscriptionDevoirModel i2) -> i1.getNomDevoir().compareTo(i2.getNomDevoir());
 
 		for (InscriptionModule inscM : inscS.getInscriptionsModule()) {
 
@@ -47,23 +64,33 @@ public class SimulateurService {
 			inscMM.setNomModule(inscM.getModule().getNom());
 			inscMM.setCoefficient(inscM.getCoefficient());
 			inscMM.setCalculateur(genererCalculateurModel(inscM.getCalculateur()));
-			Set<InscriptionDevoirModel> inscriptionsDevoir = inscMM.getInscriptionsDevoir();
+			Set<InscriptionDevoirModel> setInscDM = new HashSet<>();
 
 			for (InscriptionDevoir inscD : inscM.getInscriptionsDevoir()) {
 
 				InscriptionDevoirModel inscDM = new InscriptionDevoirModel();
 				inscDM.setId(inscDM.getId());
-				inscDM.setCoefficient(inscDM.getCoefficient());
+				inscDM.setCoefficient(inscD.getCoefficient());
 				inscDM.setNomDevoir(inscD.getDevoir().getNom());
 				inscDM.setCalculateur(genererCalculateurModel(inscD.getCalculateur()));
 
-				inscriptionsDevoir.add(inscDM);
+				setInscDM.add(inscDM);
 
 			}
-
-			inscriptionsModule.add(inscMM);
+			
+			// trier les inscriptionDevoirModel et les ajouter à inscriptionModuleModel
+			List<InscriptionDevoirModel> listInscDM = new ArrayList<>(setInscDM);
+			listInscDM.sort(inscDMComparator);
+			inscMM.setInscriptionsDevoir(listInscDM);
+			
+			setInscMM.add(inscMM);
 
 		}
+		
+		// trier les inscriptionModuleModel et les ajouter à inscriptionSessionModel
+		List<InscriptionModuleModel> listInscMM = new ArrayList<>(setInscMM);
+		listInscMM.sort(inscMMComparator);
+		inscSM.setInscriptionsModule(listInscMM);
 
 		return inscSM;
 
@@ -132,12 +159,19 @@ public class SimulateurService {
 		}
 
 	}
-	
+
 	@Transactional
 	public Set<CalculateurModel> annulerNoteObjectif(Long idCalculateur) {
-		
+
 		return setNoteObjectif(idCalculateur, null);
+
+	}
+
+	public List<InscriptionSessionSimpleModel> getInscriptionsSessionSimples() {
 		
+		List<InscriptionSessionSimpleModel> inscSM = repInscriptionSession.getInscriptionsSessionSimples();
+		return inscSM;
+
 	}
 
 }

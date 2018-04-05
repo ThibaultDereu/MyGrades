@@ -1,6 +1,7 @@
-package com.mygrades.web.mesNotes;
+package com.mygrades.web.simulateur;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class InscriptionModuleModel {
@@ -10,7 +11,7 @@ public class InscriptionModuleModel {
 	private String nomModule;
 	private Integer coefficient;
 	private CalculateurModel calculateur;
-	private Set<InscriptionDevoirModel> inscriptionsDevoir = new HashSet<>();
+	private List<InscriptionDevoirModel> inscriptionsDevoir = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -52,11 +53,11 @@ public class InscriptionModuleModel {
 		this.coefficient = coefficient;
 	}
 
-	public Set<InscriptionDevoirModel> getInscriptionsDevoir() {
+	public List<InscriptionDevoirModel> getInscriptionsDevoir() {
 		return inscriptionsDevoir;
 	}
 
-	public void setInscriptionsDevoir(Set<InscriptionDevoirModel> inscriptionsDevoir) {
+	public void setInscriptionsDevoir(List<InscriptionDevoirModel> inscriptionsDevoir) {
 		this.inscriptionsDevoir = inscriptionsDevoir;
 	}
 
