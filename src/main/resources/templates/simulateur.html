@@ -17,24 +17,27 @@
 	<div class="container" role="main" th:object="${inscriptionSession}">
 
 		<div class="text-center">
-			<h3><strong th:text="${inscriptionSession.nomFiliere}" /></h3> 
+			<h3>
+				<strong th:text="${inscriptionSession.nomFiliere}" />
+			</h3>
 			<h3 th:text="${'Session ' + inscriptionSession.nomSession}" />
 			<h4 class="text-muted"
 				th:text="${inscriptionSession.prenomEtudiant + ' ' + #strings.toUpperCase(inscriptionSession.nomEtudiant)}" />
 		</div>
-		
+
 		<br />
-		
+
 		<!-- LE SEMESTRE -->
 		<div class="mx-auto col-6 card">
 
 			<div class="card-body">
-				
+
 				<div class="d-flex justify-content-between">
 					<h5 th:text="${'Semestre ' + inscriptionSession.nomSemestre}" />
-					<small class="text-muted" th:text="${'coeff ' + inscriptionSession.coefficient}" />
+					<small class="text-muted"
+						th:text="${'coeff ' + inscriptionSession.coefficient}" />
 				</div>
-	
+
 				<div class="progress border">
 
 					<div class="progress-bar progress-sous-min" style="width: 50%;"
@@ -65,23 +68,24 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<br />
-	
-	
+
+
 		<div class="card-columns">
-			
+
 			<!-- LES MODULES -->
 			<div class="card" th:each="inscriptionModule : *{inscriptionsModule}">
 
 				<div class="card-body">
-					
+
 					<div class="d-flex justify-content-between">
 						<h5 class="card-title"
 							th:text="${inscriptionModule.codeModule + ' - ' + inscriptionModule.nomModule}" />
-						<small class="text-muted" th:text="${'coeff ' + inscriptionModule.coefficient}" />
+						<small class="text-muted"
+							th:text="${'coeff ' + inscriptionModule.coefficient}" />
 					</div>
-						
+
 
 					<div class="progress border">
 
@@ -113,20 +117,26 @@
 							style="display: none;" />
 					</div>
 
-					<small><a th:href="${'#devoirs' + inscriptionModule.id}"
-							data-toggle="collapse">devoirs...</a></small>
+					<small><a
+							th:if="${inscriptionModule.inscriptionsDevoir.size() > 0}"
+							th:href="${'#devoirs' + inscriptionModule.id}"
+							data-toggle="collapse">
+							devoirs
+							<span class="glyphicon glyphicon-chevron-down" />
+						</a></small>
 
-					
+
 					<!-- LES DEVOIRS -->
 					<div class="collapse col-11 offset-1"
 						th:id="${'devoirs' + inscriptionModule.id}">
 
 						<th:block
 							th:each="inscriptionDevoir: ${inscriptionModule.inscriptionsDevoir}">
-							
+
 							<div class="d-flex justify-content-between">
 								<h th:text="${inscriptionDevoir.nomDevoir}" />
-								<small class="text-muted" th:text="${'coeff ' + inscriptionDevoir.coefficient}" />
+								<small class="text-muted"
+									th:text="${'coeff ' + inscriptionDevoir.coefficient}" />
 							</div>
 
 							<div class="progress border">

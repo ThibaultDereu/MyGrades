@@ -89,6 +89,6 @@ body {
 	border-right: solid 1px blue;
 }
 
-.progress-note-unique>.range-objectif {
+.progress-note-unique > .range-objectif {
 	display: none;
 }

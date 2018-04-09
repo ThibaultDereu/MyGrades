@@ -86,7 +86,7 @@
 			var boutonAnnulerObjectif = $("#bouton-annuler-objectif" + calc.id);
 
 			// progress-note : class
-			if (calc.noteMin == calc.noteMax) {
+			if (arrondirDouble(calc.noteMin) == arrondirDouble(calc.noteMax)) {
 				progressNote.addClass("progress-note-unique");
 				progressNote.removeClass("progress-note-variable");
 				progressNote.removeClass("progress-note-objectif");
@@ -108,7 +108,7 @@
 			});
 
 			// caption-note : html
-			if (calc.noteMin == calc.noteMax) {
+			if (arrondirDouble(calc.noteMin) == arrondirDouble(calc.noteMax)) {
 				flagObjectif.hide();
 				boutonAnnulerObjectif.hide();
 				caption.html(arrondirDouble(calc.noteMin));
