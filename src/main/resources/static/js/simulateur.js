@@ -100,7 +100,7 @@
 				progressNote.removeClass("progress-note-objectif");
 			}
 
-			// range : min, max, value
+			// range : min, max, value	
 			range.attr({
 				"min" : calc.noteMin,
 				"max" : calc.noteMax,
